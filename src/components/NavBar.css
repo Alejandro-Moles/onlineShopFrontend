@@ -1,0 +1,158 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family:'Times New Roman', Times, serif;
+    text-decoration: none;
+    list-style: none;
+}
+:root{
+    --bg-color: #1E1E1E;
+    --text-color: #fff;
+    --main-color: #29fd53;
+    --complementary-color: #005500;
+}
+.body{
+    min-height: 10vh;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+header{
+    position: fixed;
+    background-color: var(--bg-color);
+    width: 100%;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background:transparent;
+    padding: 28px 12%;
+    transition: all .50s ease;
+}
+.logo{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.icon{
+    color: var(--main-color);
+    font-size: 28px;
+    margin-right: 3px;
+}
+.logo span{
+    color: var(--text-color);
+    font-size: 1.7rem;
+    font-weight: 600;
+}
+.navBar{
+    display: flex;
+    align-items: center;
+}
+.navbar-button .MuiSvgIcon-root {
+    font-size: 35px;
+    color: var(--text-color);
+    padding: 5px 0;
+    font-weight: 500;
+    margin: 0px 30px;
+    transition: all .50s ease;
+
+}
+.navBar a{
+    font-size: 1.1rem;
+    color: var(--text-color);
+    padding: 5px 0;
+    font-weight: 500;
+    margin: 0px 30px;
+    transition: all .50s ease;
+}
+.navbar-button .MuiSvgIcon-root:hover{
+    color: var(--main-color);
+}
+.navbar-button {
+    margin-right: 10px;
+}
+.navBar a:hover{
+    color: var(--main-color)
+}
+.navBar a.active{
+    color: var(--main-color)
+}
+.main{
+    display: flex;
+    align-items: center;
+}
+.main a{
+    margin-right: 25px;
+    margin-left: 10px;
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all .50s ease;
+}
+.main a:hover{
+    color: var(--main-color)
+}
+#menu-icon{
+    font-size: 35px;
+    color: var(--text-color);
+    cursor: pointer;
+    z-index: 1001;
+    display: none;
+}
+
+
+@media (max-width: 1280px){
+    header{
+        padding: 14px 2%;
+        transition: .2s;
+    }
+
+    .navBar a{
+        padding: 5px 0;
+        margin: 0px 20px;
+    }
+
+    
+}
+
+
+@media (max-width: 1090px){
+    #menu-icon{
+        display: block;
+    }
+    .navBar{
+        position: absolute;
+        top: 100%;
+        right: -100%;
+        width: 270px;
+        height: 29vh;
+        background: var(--complementary-color);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        border-radius: 10px;
+        transition: all .50s ease;
+    }
+    .navBar a{
+        display: block;
+        margin: 12px 0;
+        padding: 0px 25px;
+        transition: all .50s ease;
+    }
+    .navBar a:hover{
+        color: var(--text-color);
+        transform: translateY(5px);
+    }
+    .navbar-button .MuiSvgIcon-root:hover{
+        color: var(--text-color);
+        transform: translateY(5px);
+    }
+    .navBar a.active{
+        color: var(--text-color);
+    }
+    .open{
+        right: 2%;
+    }
+}
