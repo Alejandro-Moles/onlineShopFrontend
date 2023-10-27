@@ -1,14 +1,21 @@
-.App{
-    
+:root{
+    --bg-color: #1E1E1E;
+    --text-color: #fff;
+    --main-color-br: #FF4D08;
+    --main-color: #EC6B22;
 }
-
 .App h1{
     text-align: center;
 }
-
 .container{
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     justify-content:  center;
+}
+
+.App{
+    background-color: #333333;
+    height: 100vh;
+    width: 100vw;
 }

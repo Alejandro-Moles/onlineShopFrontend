@@ -1,0 +1,21 @@
+.carousel {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+.carousel img {
+    max-height: 500px;
+}
+  
+.carousel-container {
+    padding-top: 60px;
+    text-align: center; 
+}
+
+
+@media (max-width: 900px) {
+    .carousel {
+        width: 70%;
+        margin: 0 auto;
+      }
+}

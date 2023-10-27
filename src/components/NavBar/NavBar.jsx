@@ -6,33 +6,35 @@ import SearchIcon from '@mui/icons-material/Search';
 import GamepadIcon from '@mui/icons-material/Gamepad';
 import MenuIcon from '@mui/icons-material/Menu';
 import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 
 function NavBar() {
 
   const [isOpen, setIsOpen] = useState(false);
   const handleButtonClick = () => {
-    console.log("A")
     setIsOpen(!isOpen);
   }
 
   return (
     <div className='body'>
         <header>
-          <a href="#" className="logo">
+          <Link className="logo" to={"/"}>
             <GamepadIcon className="icon" fontSize="large"/>
             <span>Logo</span>
-          </a>
+          </Link>
           <ul className={`navBar ${isOpen ? 'open' : ''}`}>
           <li>
-              <Tooltip title="Search Product" arrow>
-                <Button color="inherit" className="navbar-button">
-                  <SearchIcon />
-                </Button>
+            <Link to={"/searchProducts"}>
+                <Tooltip title="Search Products" arrow>
+                  <div className="navbar-button">
+                    <SearchIcon />
+                  </div>
               </Tooltip>
+            </Link>
             </li>
-            <li><a href="#" className="active">Home</a></li>
-            <li><a href="#">Location</a></li>
-            <li><a href="#">User Account</a></li>
+            <li><Link className="active" to={"/"}>Home</Link></li>
+            <li><Link to={"/"}>Location</Link></li>
+            <li><Link to={"/"}>User Account</Link></li>
             <li>
               <Tooltip title="Shopping Cart" arrow>
                 <Button color="inherit" className="navbar-button">
@@ -43,8 +45,8 @@ function NavBar() {
           </ul>
 
           <div className="main">
-            <a href="#" className="user"><i>Sign In</i></a>
-            <a href="#">Register</a>
+            <Link to={"/login"} className="user"><i>Sign In</i></Link>
+            <Link to={"/signup"}>Register</Link>
             <Button className="menu-button" onClick={handleButtonClick}>
               <MenuIcon id="menu-icon"/>  
             </Button>

@@ -1,30 +1,26 @@
 
 import './App.css'
-import NavBar from './components/NavBar';
-import ProductService from './services/productService';
+import NavBar from './components/NavBar/NavBar';
 import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Routers, Routes, Route } from 'react-router-dom';
+import Home from './components/Home/Home';
+import Login from './components/Login/Login';
+import Signup from './components/Login/Signup';
+import SearchPage from './components/SearchPage/SearchPage';
 
 function App() {
-
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await ProductService.getProducts();
-        setProducts(response.data); 
-        console.log(response.data)
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  return <div className="App">
-      <NavBar></NavBar>
-      <h1>Hola</h1>
-  </div>;
+  return (
+      <Routers>
+          <NavBar/>
+          <Routes>
+            <Route path="/" element={<Home/>} />
+            <Route path="/login" element={<Login/>} />
+            <Route path="/signup" element={<Signup/>} />
+            <Route path="/searchProducts" element={<SearchPage/>} />
+          </Routes>    
+      </Routers>
+  )    
 }
 
 export default App
