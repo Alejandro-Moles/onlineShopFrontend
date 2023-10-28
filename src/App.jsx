@@ -8,6 +8,7 @@ import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import Signup from './components/Login/Signup';
 import SearchPage from './components/SearchPage/SearchPage';
+import  Article  from './components/ArticlePage/Article';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/login" element={<Login/>} />
             <Route path="/signup" element={<Signup/>} />
             <Route path="/searchProducts" element={<SearchPage/>} />
+            <Route path="/article/:uuid" element={<Article/>}/>
           </Routes>    
       </Routers>
   )    

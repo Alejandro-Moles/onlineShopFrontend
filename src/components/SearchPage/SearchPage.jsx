@@ -9,7 +9,9 @@ function SearchPage() {
   const [items, setItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState('');
+  const [selectedPegi, setSelectedPEGI] = useState('');
   const [results, setResults] = useState([]);
+  const [filterListVisible, setFilterListVisible] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -23,19 +25,23 @@ function SearchPage() {
     fetchItems();
   }, []);
 
-  const handleFilterChange = (category, platform) => {
+  const toggleFilterList = () => {
+    setFilterListVisible(!filterListVisible);
+  };
+
+  const handleFilterChange = (category, platform, maxPrice, pegi) => {
     setSelectedCategory(category);
     setSelectedPlatform(platform);
+    setSelectedPEGI(pegi);
 
     const filteredResults = items.filter((item) => {
-      if (category && platform) {
-        return item.category === category && item.platform === platform;
-      } else if (category) {
-        return item.category === category;
-      } else if (platform) {
-        return item.platform === platform;
-      }
-      return true;
+      
+      const categoryMatch = category ? item.category === category : true;
+      const platformMatch = platform ? item.platform === platform : true;
+      const pegiMatch = pegi ? item.pegi == pegi : true;
+      const priceMatch = maxPrice ? item.price <= maxPrice : true;
+
+      return categoryMatch && platformMatch && priceMatch && pegiMatch;
     });
 
     setResults(filteredResults);
@@ -44,9 +50,9 @@ function SearchPage() {
   return (
     <div>
       <div className="searchBar-container">
-        <SearchBar setResults={setResults} />
+        <SearchBar setResults={setResults} toggleFilterList={toggleFilterList}/>
       </div>
-      <FilterList onFilterChange={handleFilterChange} />
+      {filterListVisible && <FilterList onFilterChange={handleFilterChange} />}
       <ProductList products={results} />
     </div>
   );
