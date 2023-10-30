@@ -1,5 +1,4 @@
 
-import '../../App.css'
 import CarouselComponent from '../Carousel/CarouselComponent'
 import React, { useState, useEffect } from 'react';
 import ProductService from '../../services/productService';

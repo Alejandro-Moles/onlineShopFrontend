@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './SearchPage.css';
 import SearchBar from './SearchBar';
 import ProductList from '../ProductList/ProductList';
-import { FilterList } from './FilterList';
 import ProductService from '../../services/productService';
+import FilterMenu from './FilterMenu';
 
 function SearchPage() {
   const [items, setItems] = useState([]);
@@ -12,6 +12,7 @@ function SearchPage() {
   const [selectedPegi, setSelectedPEGI] = useState('');
   const [results, setResults] = useState([]);
   const [filterListVisible, setFilterListVisible] = useState(false);
+  const [filterMenuVisible, setFilterMenuVisible] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -47,13 +48,25 @@ function SearchPage() {
     setResults(filteredResults);
   };
 
+  const toggleFilterMenu = () => {
+    setFilterMenuVisible(!filterMenuVisible);
+
+    if (filterMenuVisible) {
+      document.body.classList.remove('menu-opened');
+    } else {
+      document.body.classList.add('menu-opened');
+    }
+  };
+
   return (
-    <div>
+    <div className={`searchPage-container ${filterMenuVisible ? 'menu-opened' : ''}`}>
       <div className="searchBar-container">
-        <SearchBar setResults={setResults} toggleFilterList={toggleFilterList}/>
+        <SearchBar setResults={setResults} toggleFilterList={toggleFilterMenu} />
       </div>
-      {filterListVisible && <FilterList onFilterChange={handleFilterChange} />}
-      <ProductList products={results} />
+      {filterMenuVisible && <FilterMenu onFilterChange={handleFilterChange} />}
+      <div className='ProductList'>
+        <ProductList products={results} />
+      </div>
     </div>
   );
 }

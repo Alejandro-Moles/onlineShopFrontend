@@ -1,11 +1,19 @@
 .searchBar-container{
-    padding-top: 15vh;
+    padding-top: 5vh;
     width: 40%;
     margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-width: 200px;
+    max-width: 100%; 
+    margin: 0 auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s;
+    position: relative;
+    transition: transform 0.3s;
 }
 
 .input-wrapper{
@@ -41,3 +49,24 @@ input:focus{
     color: #000;
 }
 
+.filter-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #292929;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+}
+
+.menu-opened .searchBar-container {
+    margin-left: 630px;
+    transition: margin 0.3s;
+  }
+  
+.menu-opened .ProductList {
+    margin-left: 250px;
+    transition: margin 0.3s;
+}
+  

@@ -1,59 +1,72 @@
-
-import { AppBar, Toolbar, Typography, Button, Tooltip, Input,InputAdornment, Grid } from '@mui/material';
-import './NavBar.css';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SearchIcon from '@mui/icons-material/Search';
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart, faUserCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 import GamepadIcon from '@mui/icons-material/Gamepad';
-import MenuIcon from '@mui/icons-material/Menu';
-import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Tooltip } from '@mui/material';
+import "./NavBar.css"
 
-function NavBar() {
-
-  const [isOpen, setIsOpen] = useState(false);
-  const handleButtonClick = () => {
-    setIsOpen(!isOpen);
-  }
-
-  return (
-    <div className='body'>
-        <header>
-          <Link className="logo" to={"/"}>
-            <GamepadIcon className="icon" fontSize="large"/>
-            <span>Logo</span>
-          </Link>
-          <ul className={`navBar ${isOpen ? 'open' : ''}`}>
-          <li>
-            <Link to={"/searchProducts"}>
-                <Tooltip title="Search Products" arrow>
-                  <div className="navbar-button">
-                    <SearchIcon />
-                  </div>
-              </Tooltip>
+export default function NavBar() {
+    return (
+        <nav className="navbar navbar-expand-lg navbar-dark bg-main fixed-top" id='my-navBar'>
+            <Link className="logo" to={"/"}>
+                <GamepadIcon className="icon" fontSize="large"/>
             </Link>
-            </li>
-            <li><Link className="active" to={"/"}>Home</Link></li>
-            <li><Link to={"/"}>Location</Link></li>
-            <li><Link to={"/"}>User Account</Link></li>
-            <li>
-              <Tooltip title="Shopping Cart" arrow>
-                <Button color="inherit" className="navbar-button">
-                  <ShoppingCartIcon />
-                </Button>
-              </Tooltip>
-            </li>
-          </ul>
 
-          <div className="main">
-            <Link to={"/login"} className="user"><i>Sign In</i></Link>
-            <Link to={"/signup"}>Register</Link>
-            <Button className="menu-button" onClick={handleButtonClick}>
-              <MenuIcon id="menu-icon"/>  
-            </Button>
-          </div>
-        </header>
-    </div>
-  );
+            {/* Navbar Toggler Button for Small Screens */}
+            <button
+                className="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span className="navbar-toggler-icon"></span>
+            </button>
+
+            <div className="collapse navbar-collapse" id="navbarNav">
+                <ul className="navbar-nav mr-auto">
+                    <li className="nav-item active">
+                        <Link className="nav-link" to="/">
+                            Home <span className="sr-only">(current)</span>
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/searchProducts">
+                            Products
+                        </Link>
+                    </li>
+                </ul>
+            </div>
+
+            <div className="d-flex">
+
+                <div className="location">
+                    <Tooltip title="Location" arrow>
+                        <Link className="btn btn-link" to="/location">
+                            <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" id='locationIcon'/>
+                        </Link>
+                    </Tooltip>
+                </div>
+                
+                <Tooltip title="User Account" arrow>
+                <div className="user_png">
+                    <Link className="btn btn-link" to="/login">
+                        <FontAwesomeIcon icon={faUserCircle} size="lg" className="text-white" />
+                    </Link>
+                </div>
+                </Tooltip>
+            </div>
+
+            <div className="cart">
+            <Tooltip title="Shopping Cart" arrow>
+                <Link className="btn btn-link" to="/">
+                    <FontAwesomeIcon icon={faShoppingCart} size="lg" id='cartIcon'/>
+                </Link>
+            </Tooltip>
+            </div>
+        </nav>
+    );
 }
-
-export default NavBar;

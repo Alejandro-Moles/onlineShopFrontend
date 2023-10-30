@@ -1,0 +1,14 @@
+.floating-button-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+}
+
+.fab{
+  background-color: var(--main-color);
+}
+
+.fab:hover{
+  background-color: #b94b0c
+}

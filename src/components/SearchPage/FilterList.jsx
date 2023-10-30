@@ -98,7 +98,7 @@ export const FilterList = ({ onFilterChange }) => {
         </select>
       </div>
 
-      <div className="price-filter-container">
+      <div className="select-container">
         <label className="select-label">Max Price</label>
         <input
           type="number"

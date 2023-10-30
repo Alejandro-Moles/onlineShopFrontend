@@ -1,0 +1,28 @@
+.imgItem {
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+	border-radius: 10px 10px 0 0;
+	transition: all 0.5s;
+}
+
+.imgItem:hover  {
+	transform: scale(1.1);
+}
+
+.cardItem{
+  overflow: hidden;
+}
+  
+.product-card {
+	color: white;
+	padding: 16px;
+	padding-top: 30px;
+}
+  
+.card-actions {
+	margin-top: auto;
+}
+
+
+  
