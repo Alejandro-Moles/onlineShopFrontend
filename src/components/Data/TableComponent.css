@@ -1,0 +1,18 @@
+.custom-table {
+    width: 100%;
+    margin-bottom: 60px;
+    background-color: white;
+  }
+  
+  .floating-buttons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .floating-buttons .floatButton:first-child {
+    margin-right: 70px; 
+  }
+  
+  .floating-buttons .floatButton:last-child {
+    margin-left: 70px; 
+  }

@@ -6,8 +6,14 @@ const getCategories = () => {
     return axios.get(API_URL + "categories");
 };
 
+const updateCategories = (uuid, categoryData) => {
+    const url = `${API_URL}categories/${uuid}`;
+    return axios.put(url, categoryData);
+}
+
 const CategoriesService = {
     getCategories,
+    updateCategories
 };
 
 export default CategoriesService;
