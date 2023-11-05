@@ -7,38 +7,105 @@ import TableComponent from './TableComponent';
 import CategoriesService from '../../services/categoriesService';
 import PlatformsService from '../../services/platformsService';
 import ProductService from '../../services/productService';
-import CountriesService from '../../services/countryService';
-import CitiesService from '../../services/cityService';
-import PostalCodeService from '../../services/postalCodeService';
 import DeliveriesService from '../../services/deliveryService';
 import PaymentService from '../../services/paymentService';
 import GenreService from '../../services/genreService';
-import UserAddressService from '../../services/userAddress';
-import ShopUserService from '../../services/shopUserService';
+import AlertMessage from '../AlertsMessage/AlertMessage';
 
-const DataPage = () => {
+const DataPage = () => { 
+  //ALERT MESSAGE
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('info');
+
+  const showAlertMessage = (message, severity) => {
+    setAlertMessage(message);
+    setAlertSeverity(severity);
+    setIsAlertOpen(true);
+  };
+  
+  //TABLES
   const [tableData, setTableData] = useState({
     categories: [],
     platforms: [],
     products: [],
-    countries: [],
-    cities: [],
-    postalCode: [],
     payments: [],
     deliveries: [],
     genres: [],
-    users: [],
+    shopUsers: [],
     userAddress: [],
   });
 
   const deleteCategory = (uuid, type) => {
     CategoriesService.updateCategories(uuid, { type, isDeleted: true })
       .then((response) => {
-        console.log('Categoría actualizada con éxito:', response.data);
+        showAlertMessage('Category successfully removed, reload the page to see the changes.', 'success');
       })
       .catch((error) => {
-        console.error('Error al actualizar la categoría:', error);
+        showAlertMessage('An error occurred while deleting the category: ' + error, 'error');
       });
+  };
+
+  const deletePlatform = (uuid, type) => {
+    PlatformsService.updatePlatforms(uuid, { type, isDeleted: true })
+    .then((response) => {
+      showAlertMessage('Platform successfully removed, reload the page to see the changes.', 'success');
+    })
+    .catch((error) => {
+      showAlertMessage('An error occurred while deleting the platform: ' + error, 'error');
+    });
+  };
+
+  const deleteProduct = (uuid, category, platform, pegi, title, price, weight, stock, description, isDigital, image) => {
+    ProductService.updateProducts(uuid, {
+      category,
+      platform,
+      pegi,
+      title,
+      price,
+      weight,
+      stock,
+      description,
+      isDigital,
+      image,
+      isDeleted: true
+    })
+    .then((response) => {
+      showAlertMessage('Products successfully removed, reload the page to see the changes.', 'success');
+    })
+    .catch((error) => {
+      showAlertMessage('An error occurred while deleting the products: ' + error, 'error');
+    });
+  };
+
+  const deletePayment = (uuid, type) => {
+    PaymentService.updatePayment(uuid, { type, isDeleted: true })
+    .then((response) => {
+      showAlertMessage('Payment successfully removed, reload the page to see the changes.', 'success');
+    })
+    .catch((error) => {
+      showAlertMessage('An error occurred while deleting the payment: ' + error, 'error');
+    });
+  };
+
+  const deleteDelivery = (uuid, type) => {
+    DeliveriesService.updateDelivery(uuid, { type, isDeleted: true })
+    .then((response) => {
+      showAlertMessage('Delivery successfully removed, reload the page to see the changes.', 'success');
+    })
+    .catch((error) => {
+      showAlertMessage('An error occurred while deleting the delivery: ' + error, 'error');
+    });
+  };
+
+  const deleteGenre = (uuid, type) => {
+    GenreService.updateGenre(uuid, { type, isDeleted: true })
+    .then((response) => {
+      showAlertMessage('Genre successfully removed, reload the page to see the changes.', 'success');
+    })
+    .catch((error) => {
+      showAlertMessage('An error occurred while deleting the genre: ' + error, 'error');
+    });
   };
 
   useEffect(() => {
@@ -60,98 +127,53 @@ const DataPage = () => {
     fetchDataFor(CategoriesService.getCategories, (category, index) => ({
       id: index + 1,
       uuid: category.uuid,
-      category: category.type,
+      categoryType: category.type,
       deleted: category.isDeleted ? 'Yes' : 'No',
     }), 'categories');
 
     fetchDataFor(PlatformsService.getPlatforms, (platforms, index) => ({
       id: index + 1,
       uuid: platforms.uuid,
-      platforms: platforms.type,
+      platformsType: platforms.type,
       deleted: platforms.isDeleted ? 'Yes' : 'No',
     }), 'platforms');
 
     fetchDataFor(ProductService.getProducts, (products, index) => ({
       id: index + 1,
+      image: products.image,
       uuid: products.uuid,
       category: products.category,
       platform: products.platform,
       pegi: products.pegi,
-      title: products.title,
+      productTitle: products.title,
       price: products.price,
       weight: products.weight,
       stock: products.stock,
       description: products.description,
-      digital: products.digital ? 'Yes' : 'No',
+      digital: products.isDigital ? 'Yes' : 'No',
       deleted: products.isDeleted ? 'Yes' : 'No',
     }), 'products');
-
-    fetchDataFor(CountriesService.getCountries, (countries, index) => ({
-      id: index + 1,
-      uuid: countries.uuid,
-      country: countries.name,
-      deleted: countries.isDeleted ? 'Yes' : 'No',
-    }), 'countries');
-
-    fetchDataFor(CitiesService.getCities, (cities, index) => ({
-      id: index + 1,
-      uuid: cities.uuid,
-      city: cities.name,
-      country: cities.countryName,
-      deleted: cities.isDeleted ? 'Yes' : 'No',
-    }), 'cities');
-
-    fetchDataFor(PostalCodeService.getPostalCode, (postalCode, index) => ({
-      id: index + 1,
-      uuid: postalCode.uuid,
-      postalCode: postalCode.content,
-      city: postalCode.cityName,
-      country: postalCode.countryName,
-      deleted: postalCode.isDeleted ? 'Yes' : 'No',
-    }), 'postalCode');
 
     fetchDataFor(PaymentService.getPayment, (payments, index) => ({
       id: index + 1,
       uuid: payments.uuid,
-      payment: payments.type,
+      paymentType: payments.type,
       deleted: payments.isDeleted ? 'Yes' : 'No',
     }), 'payments');
 
     fetchDataFor(DeliveriesService.getDeliveries, (deliveries, index) => ({
       id: index + 1,
       uuid: deliveries.uuid,
-      delivery: deliveries.type,
+      deliveryType: deliveries.type,
       deleted: deliveries.isDeleted ? 'Yes' : 'No',
     }), 'deliveries');
 
     fetchDataFor(GenreService.getGenres, (genres, index) => ({
       id: index + 1,
       uuid: genres.uuid,
-      genre: genres.type,
+      genreType: genres.type,
       deleted: genres.isDeleted ? 'Yes' : 'No',
     }), 'genres');
-
-    fetchDataFor(UserAddressService.getUserAddress, (userAddress, index) => ({
-      id: index + 1,
-      uuid: userAddress.uuid,
-      apartament: userAddress.apartament,
-      home: userAddress.home,
-      street: userAddress.street,
-      postalCode: userAddress.postalCode,
-      userMail: userAddress.userMail,
-      deleted: userAddress.isDeleted ? 'Yes' : 'No',
-    }), 'userAddress');
-
-    fetchDataFor(ShopUserService.getShopUser, (shopUsers, index) => ({
-      id: index + 1,
-      uuid: shopUsers.uuid,
-      userRol: shopUsers.userRol,
-      name: shopUsers.name,
-      surname: shopUsers.surname,
-      mail: shopUsers.mail,
-      birth: shopUsers.birth,
-      deleted: shopUsers.isDeleted ? 'Yes' : 'No',
-    }), 'users');
   }, []);
 
   const tableColumns = [
@@ -159,23 +181,24 @@ const DataPage = () => {
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
-      { field: 'category', headerName: 'Category', width: 130 },
+      { field: 'categoryType', headerName: 'Category', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
     // Para "Platforms"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
-      { field: 'platforms', headerName: 'Platform', width: 130 },
+      { field: 'platformsType', headerName: 'Platform', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
     // Para "Products"
     [
       { field: 'id', headerName: 'ID', width: 70 },
+      { field: 'image', hideable: true },
       { field: 'uuid', hideable: true },
       { field: 'category', headerName: 'Category', width: 130 },
       { field: 'platform', headerName: 'Platform', width: 130 },
-      { field: 'title', headerName: 'Title', width: 200 },
+      { field: 'productTitle', headerName: 'Title', width: 200 },
       { field: 'price', headerName: 'Price', width: 90 },
       { field: 'weight', headerName: 'Weight', width: 90 },
       { field: 'stock', headerName: 'Stock', width: 90 },
@@ -184,102 +207,39 @@ const DataPage = () => {
       { field: 'description', headerName: 'Description', width: 200 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
-    // Para "Countries"
-    [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'uuid', hideable: true },
-      { field: 'country', headerName: 'Country', width: 130 },
-      { field: 'deleted', headerName: 'Deleted', width: 90 },
-    ],
-    // Para "Cities"
-    [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'uuid', hideable: true },
-      { field: 'city', headerName: 'City', width: 130 },
-      { field: 'country', headerName: 'Country', width: 130 },
-      { field: 'deleted', headerName: 'Deleted', width: 90 },
-    ],
-    // Para "PostalCode"
-    [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'uuid', hideable: true },
-      { field: 'postalCode', headerName: 'Postal Code', width: 130 },
-      { field: 'city', headerName: 'City', width: 130 },
-      { field: 'country', headerName: 'Country', width: 130 },
-      { field: 'deleted', headerName: 'Deleted', width: 90 },
-    ],
     // Para "Payments"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
-      { field: 'payment', headerName: 'Payments', width: 130 },
+      { field: 'paymentType', headerName: 'Payments', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
     // Para "Deliveries"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
-      { field: 'delivery', headerName: 'Delivery', width: 130 },
+      { field: 'deliveryType', headerName: 'Delivery', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
     // Para "Genres"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
-      { field: 'genre', headerName: 'Genre', width: 130 },
-      { field: 'deleted', headerName: 'Deleted', width: 90 },
-    ],
-    // Para "Users"
-    [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'uuid', hideable: true },
-      { field: 'userRol', headerName: 'User Rol', width: 130 },
-      { field: 'name', headerName: 'Name', width: 130 },
-      { field: 'surname', headerName: 'SurName', width: 130 },
-      { field: 'mail', headerName: 'Mail', width: 130 },
-      { field: 'birth', headerName: 'Birth', width: 250 },
-      { field: 'deleted', headerName: 'Deleted', width: 90 },
-    ],
-    // Para "User Address"
-    [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'uuid', hideable: true },
-      { field: 'apartament', headerName: 'Apartamanet', width: 130 },
-      { field: 'home', headerName: 'Home', width: 130 },
-      { field: 'street', headerName: 'Street', width: 130 },
-      { field: 'postalCode', headerName: 'Postal Code', width: 130 },
-      { field: 'userMail', headerName: 'User mail', width: 250 },
+      { field: 'genreType', headerName: 'Genre', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
   ];
 
   const deleteHandlerFunctions = [
-    // Función de eliminación para "Categories"
     deleteCategory,
-    {/*
-    // Función de eliminación para "Platforms"
     deletePlatform,
-    // Función de eliminación para "Products"
     deleteProduct,
-    // Función de eliminación para "Countries"
-    deleteCountry,
-    // Función de eliminación para "Cities"
-    deleteCity,
-    // Función de eliminación para "PostalCode"
-    deletePostalCode,
-    // Función de eliminación para "Payments"
     deletePayment,
-    // Función de eliminación para "Deliveries"
     deleteDelivery,
-    // Función de eliminación para "Genres"
     deleteGenre,
-    // Función de eliminación para "Users"
-    deleteUser,
-    // Función de eliminación para "User Address"
-    deleteUserAddress,
-  */}
   ];
 
+  //SELECT TABLES
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -301,14 +261,9 @@ const DataPage = () => {
             <Tab label="Category" sx={{ color: 'white', fontWeight: 'bold' }} />
             <Tab label="Platforms" sx={{ color: 'white', fontWeight: 'bold' }} />
             <Tab label="Products" sx={{ color: 'white', fontWeight: 'bold' }} />
-            <Tab label="Countries" sx={{ color: 'white', fontWeight: 'bold' }} />
-            <Tab label="Cities" sx={{ color: 'white', fontWeight: 'bold' }} />
-            <Tab label="PostalCode" sx={{ color: 'white', fontWeight: 'bold' }} />
             <Tab label="Payments" sx={{ color: 'white', fontWeight: 'bold' }} />
             <Tab label="Deliveries" sx={{ color: 'white', fontWeight: 'bold' }} />
             <Tab label="Genres" sx={{ color: 'white', fontWeight: 'bold' }} />
-            <Tab label="Users" sx={{ color: 'white', fontWeight: 'bold' }} />
-            <Tab label="Users Address" sx={{ color: 'white', fontWeight: 'bold' }} />
           </Tabs>
         </Paper>
 
@@ -319,6 +274,12 @@ const DataPage = () => {
             deleteDataBaseHandler={deleteHandlerFunctions[value]}
           />
         </div>
+        <AlertMessage
+          open={isAlertOpen}
+          message={alertMessage}
+          severity={alertSeverity}
+          onClose={() => setIsAlertOpen(false)}
+        />
       </div>
     </ThemeProvider>
   );

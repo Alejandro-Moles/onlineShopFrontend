@@ -12,9 +12,6 @@ const AlertMessage = ({ message, severity, open, onClose }) => {
 
   const { vertical, horizontal } = state;
 
-  const handleClose = () => {
-    onClose();
-  };
 
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide {...props} direction="down" ref={ref} />;
@@ -25,9 +22,9 @@ const AlertMessage = ({ message, severity, open, onClose }) => {
       <Snackbar
         anchorOrigin={{ vertical, horizontal }}
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         TransitionComponent={Transition}
-        autoHideDuration={1500}
+        autoHideDuration={2000}
         key={vertical + horizontal}
       >
         <Alert severity={severity}>{message}</Alert>

@@ -1,0 +1,28 @@
+.AddData-container {
+    display: flex;
+    flex-direction:column;
+    margin-bottom: 16px;
+}
+
+.AddDataform-field {
+    margin-bottom: 16px; /* Ajusta el valor según la cantidad de espacio que desees entre los campos. */
+}
+  
+.AddDataDialogTitle{
+    text-align: center;
+}
+  
+
+.image-selector {
+    text-align: center; 
+
+}
+  
+.image-selector-label {
+    display: block; 
+    margin-bottom: 8px;
+  }
+  
+  .image-selector-input {
+    display: none; 
+  }

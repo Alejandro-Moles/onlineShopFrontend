@@ -10,9 +10,21 @@ const getProduct = (uuid) => {
     return axios.get(`${API_URL}products/${uuid}`);
 }
 
+const updateProducts = (uuid, productData) => {
+    const url = `${API_URL}products/${uuid}`;
+    return axios.put(url, productData);
+}
+
+const createProduct = (productData) => {
+    const url = `${API_URL}products`;
+    return axios.post(url, productData);
+};
+
 const ProductService = {
     getProducts,
-    getProduct
+    getProduct,
+    updateProducts,
+    createProduct
 };
 
 

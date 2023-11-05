@@ -11,9 +11,15 @@ const updateCategories = (uuid, categoryData) => {
     return axios.put(url, categoryData);
 }
 
+const createCategory = (categoryData) => {
+    const url = `${API_URL}categories`;
+    return axios.post(url, categoryData);
+};
+
 const CategoriesService = {
     getCategories,
-    updateCategories
+    updateCategories,
+    createCategory
 };
 
 export default CategoriesService;

@@ -6,8 +6,20 @@ const getPlatforms = () => {
     return axios.get(API_URL + "platforms");
 };
 
-const PlatformsSrvice = {
-    getPlatforms,
+const updatePlatforms = (uuid, platformData) => {
+    const url = `${API_URL}platforms/${uuid}`;
+    return axios.put(url, platformData);
+}
+
+const createPlatform = (platformData) => {
+    const url = `${API_URL}platforms`;
+    return axios.post(url, platformData);
 };
 
-export default PlatformsSrvice;
+const PlatformsService = {
+    getPlatforms,
+    updatePlatforms,
+    createPlatform
+};
+
+export default PlatformsService;
