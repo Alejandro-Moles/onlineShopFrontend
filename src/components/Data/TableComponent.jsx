@@ -7,13 +7,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import "./TableComponent.css";
 import ConfirmationDialog from '../Dialog/ConfirmationDialog';
 import AddDataDialog from '../Dialog/AddDataDialog';
+import UpdateDataDialog from '../Dialog/UpdateData';
 
 function TableComponent({ columns, data, deleteDataBaseHandler}) {
   const [selectionModel, setSelectionModel] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
-
+  const [isUpdating, setIsUpdating] = useState(false);
   const [tableType, setTableType] = useState([]);
+  const [dialogUpdateData, setDialogUpdateData] = useState({ selectedData: null});
 
   const filteredColumns = columns.filter((column) => {
     return !['uuid', 'id', 'deleted'].includes(column.field);
@@ -83,10 +85,40 @@ function TableComponent({ columns, data, deleteDataBaseHandler}) {
     }
   }
 
+  const handleOpenUpdateDataDialog = () => {
+    setIsUpdating(true);
+    const selectedData = selectionModel.map((id) => data.find((row) => row.id === id));
+    setDialogUpdateData(selectedData);
+    for (const item of data) {
+      if(item.categoryType){
+        setTableType("category");
+        return;
+      } else if(item.platformsType){
+        setTableType("platforms");
+        return;
+      } else if(item.productTitle){
+        setTableType("products");
+        return;
+      } else if(item.paymentType){
+        setTableType("payment");
+        return;
+      } else if(item.deliveryType){
+        setTableType("delivery");
+        return;
+      } else if(item.genreType){
+        setTableType("genre");
+        return;
+      } 
+    }
+  }
+
   const handleCloseAddDataDialog = () => {
     setIsAdding(false);
   }
 
+  const handleCloseUpdateDataDialog = () => {
+    setIsUpdating(false);
+  }
   return (
     <div>
       <div className="custom-table">
@@ -133,6 +165,7 @@ function TableComponent({ columns, data, deleteDataBaseHandler}) {
             className='floatButton'
             color="primary"
             aria-label="Modificar"
+            onClick={handleOpenUpdateDataDialog}
             disabled={selectionModel.length !== 1}
           >
             <EditIcon />
@@ -149,6 +182,14 @@ function TableComponent({ columns, data, deleteDataBaseHandler}) {
           onClose={handleCloseAddDataDialog}
           columns={filteredColumns}
           tableType={tableType}
+        />
+
+        <UpdateDataDialog
+          open={isUpdating}
+          onClose={handleCloseUpdateDataDialog}
+          columns={filteredColumns}
+          tableType={tableType}
+          updateData={dialogUpdateData}
         />
     </div>
     

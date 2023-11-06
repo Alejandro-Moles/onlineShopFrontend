@@ -244,7 +244,6 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
           <ProductForm
             formData={formData}
             handleChange={handleChange}
-            columns={columns}
           />
         ) : tableType === 'delivery' ? (
           <DeliveryForm

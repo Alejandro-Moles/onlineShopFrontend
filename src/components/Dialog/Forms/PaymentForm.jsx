@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import {
-  DialogContent,
-  TextField,
-  FormControl,
-} from '@mui/material';
+import { DialogContent, TextField, FormControl } from '@mui/material';
 
-function PaymentForm({ formData, formErrors, handleChange }) {
+function PaymentForm({ formData, formErrors, handleChange, updateData }) {
+  const [paymentTypeValue, setPaymentTypeValue] = useState(updateData ? updateData[0].paymentType : formData.paymentType || '');
+
+  const handlePaymentTypeChange = (e) => {
+    const newValue = e.target.value;
+    setPaymentTypeValue(newValue);
+    handleChange('paymentType', newValue, 'paymentType');
+  };
+
   return (
     <DialogContent>
       <FormControl component="fieldset">
@@ -13,8 +17,8 @@ function PaymentForm({ formData, formErrors, handleChange }) {
           fullWidth
           label="Payment type"
           className="AddDatatext-field"
-          value={formData.paymentType || ''}
-          onChange={(e) => handleChange('paymentType', e.target.value, 'paymentType')}
+          value={paymentTypeValue}
+          onChange={handlePaymentTypeChange}
           error={Boolean(formErrors.paymentType)}
           helperText={formErrors.paymentType}
         />

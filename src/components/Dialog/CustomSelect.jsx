@@ -14,6 +14,7 @@ function CustomSelect({ label, value, onChange, options, error }) {
       <Select
         value={value}
         onChange={onChange}
+        fullWidth
       >
         {options.map((option) => (
           <MenuItem key={option.value} value={option.value}>
