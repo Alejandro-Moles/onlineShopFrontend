@@ -272,6 +272,7 @@ const DataPage = () => {
             columns={tableColumns[value]}
             data={tableData[Object.keys(tableData)[value]]}
             deleteDataBaseHandler={deleteHandlerFunctions[value]}
+            type={value}
           />
         </div>
         <AlertMessage

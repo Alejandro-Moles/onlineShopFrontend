@@ -9,7 +9,7 @@ import ConfirmationDialog from '../Dialog/ConfirmationDialog';
 import AddDataDialog from '../Dialog/AddDataDialog';
 import UpdateDataDialog from '../Dialog/UpdateData';
 
-function TableComponent({ columns, data, deleteDataBaseHandler}) {
+function TableComponent({ columns, data, deleteDataBaseHandler, type}) {
   const [selectionModel, setSelectionModel] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -62,26 +62,25 @@ function TableComponent({ columns, data, deleteDataBaseHandler}) {
 
   const handleOpenAddDataDialog = () => {
     setIsAdding(true);
-    for (const item of data) {
-      if(item.categoryType){
+    switch (type){
+      case 0:
         setTableType("category");
-        return;
-      } else if(item.platformsType){
+        break;
+      case 1:
         setTableType("platforms");
-        return;
-      } else if(item.productTitle){
+        break;
+      case 2:
         setTableType("products");
-        return;
-      } else if(item.paymentType){
+        break;
+      case 3:
         setTableType("payment");
-        return;
-      } else if(item.deliveryType){
+        break;
+      case 4:
         setTableType("delivery");
-        return;
-      } else if(item.genreType){
+        break;
+      case 5:
         setTableType("genre");
-        return;
-      } 
+        break;
     }
   }
 

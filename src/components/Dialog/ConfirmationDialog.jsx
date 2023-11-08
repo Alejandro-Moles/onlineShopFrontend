@@ -17,18 +17,18 @@ function ConfirmationDialog(props) {
   return (
     <div>
       <Dialog open={open} onClose={onClose}>
-        <DialogTitle>Confirmación</DialogTitle>
+        <DialogTitle>Confirmation</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            ¿Estás seguro de que deseas borrar este elemento?
+            Are you sure you want to perform this action?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">
-            Cancelar
+            Cancel
           </Button>
           <Button onClick={handleCloseAndConfirm} color="primary">
-            Confirmar
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

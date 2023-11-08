@@ -224,7 +224,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       />
 
       <div className="AddDataDialogTitle">
-        <DialogTitle>Agregar Datos</DialogTitle>
+        <DialogTitle>Add Data</DialogTitle>
       </div>
       <DialogContent className="AddData-container">
         <FormControl component="fieldset">
@@ -270,10 +270,10 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       <DialogActions>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <Button onClick={handleClose} color="primary" sx={{ marginRight: '30px' }}>
-            Cancelar
+            Cancel
           </Button>
           <Button onClick={handleAddData} color="primary">
-            Agregar
+            Add
           </Button>
         </Box>
       </DialogActions>

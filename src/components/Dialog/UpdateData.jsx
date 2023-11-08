@@ -51,14 +51,6 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
   const [formData, setFormData] = useState({});
   const [formErrors, setFormErrors] = useState({});
 
-  //REQUIREMENTS
-  const requiredFieldsProduct = ['category', 'platform', 'productTitle', 'price', 'weight', 'stock', 'pegi', 'digital', 'description'];
-  const requiredFieldsCategory = ['categoryType'];
-  const requiredFieldsPlatform = ['platformType'];
-  const requiredFieldsPayment = ['paymentType'];
-  const requiredFieldsDelivery = ['deliveryType'];
-  const requiredFieldsGenre = ['genreType'];
-
   const handleClose = () => {
     setOpenDialog(false);
     setIsAlertOpen(false);
@@ -76,33 +68,37 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
   const handleUpdateData = async () => {
     switch (tableType){
       case "category":
-        updateCategory(updateData[0].uuid, formData)
+        updateCategory(updateData[0], formData)
         break;
       case "platforms":
-        updatePlatform(updateData[0].uuid, formData)
+        updatePlatform(updateData[0], formData)
         break;
       case "payment":
-        updatePayment(updateData[0].uuid, formData)
+        updatePayment(updateData[0], formData)
         break;
       case "delivery":
-        updateDelivery(updateData[0].uuid, formData)
+        updateDelivery(updateData[0], formData)
         break;
       case "genre":
-        updateGenre(updateData[0].uuid, formData)
+        updateGenre(updateData[0], formData)
         break;
       case "products":
-        updateProduct(updateData[0].uuid, formData)
+        updateProduct(updateData[0], formData)
         break;
     } 
   };
 
-  const updateCategory = (uuid, data) => {
+  const updateCategory = (inicialData, data) => {
     if (Object.keys(data).length === 0) {
       setIsDialogOpen(false);
       showAlert('The values are the same as those of the previous category.', 'info');
       return;
     }
-    CategoriesService.updateCategories(uuid, { type: data.categoryType, isDeleted: false })
+
+    const isDeleted = inicialData.deleted === 'Yes' ? true : false;
+
+    console.log(inicialData)
+    CategoriesService.updateCategories(inicialData.uuid, { type: data.categoryType, isDeleted: isDeleted })
       .then((response) => {
         window.location.reload();
       })
@@ -111,13 +107,16 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       });
   };
 
-  const updatePlatform = (uuid, data) => {
+  const updatePlatform = (inicialData, data) => {
     if (Object.keys(data).length === 0) {
       setIsDialogOpen(false);
       showAlert('The values are the same as those of the platform.', 'info');
       return;
     }
-    PlatformsService.updatePlatforms(uuid, { type: data.platformType, isDeleted: false })
+
+    const isDeleted = inicialData.deleted === 'Yes' ? true : false;
+
+    PlatformsService.updatePlatforms(inicialData.uuid, { type: data.platformType, isDeleted: isDeleted })
       .then((response) => {
         window.location.reload();
       })
@@ -126,13 +125,16 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       });
   };
 
-  const updatePayment = (uuid, data) => {
+  const updatePayment = (inicialData, data) => {
     if (Object.keys(data).length === 0) {
       setIsDialogOpen(false);
       showAlert('The values are the same as those of the payment.', 'info');
       return;
     }
-    PaymentService.updatePayment(uuid, { type: data.paymentType, isDeleted: false })
+
+    const isDeleted = inicialData.deleted === 'Yes' ? true : false;
+
+    PaymentService.updatePayment(inicialData.uuid, { type: data.paymentType, isDeleted: isDeleted })
       .then((response) => {
         window.location.reload();
       })
@@ -141,13 +143,16 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       });
   };
 
-  const updateDelivery = (uuid, data) => {
+  const updateDelivery = (inicialData, data) => {
     if (Object.keys(data).length === 0) {
       setIsDialogOpen(false);
       showAlert('The values are the same as those of the delivery.', 'info');
       return;
     }
-    DeliveryService.updateDelivery(uuid, { type: data.deliveryType, isDeleted: false })
+
+    const isDeleted = inicialData.deleted === 'Yes' ? true : false;
+
+    DeliveryService.updateDelivery(inicialData.uuid, { type: data.deliveryType, isDeleted: isDeleted })
       .then((response) => {
         window.location.reload();
       })
@@ -156,13 +161,16 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       });
   };
 
-  const updateGenre = (uuid, data) => {
+  const updateGenre = (inicialData, data) => {
     if (Object.keys(data).length === 0) {
       setIsDialogOpen(false);
       showAlert('The values are the same as those of the genre.', 'info');
       return;
     }
-    GenreService.updateGenre(uuid, { type: data.genreType, isDeleted: false })
+
+    const isDeleted = inicialData.deleted === 'Yes' ? true : false;
+
+    GenreService.updateGenre(inicialData.uuid, { type: data.genreType, isDeleted: isDeleted })
       .then((response) => {
         window.location.reload();
       })
@@ -171,25 +179,26 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       });
   };
 
-  const updateProduct = (uuid, data) => {
+  const updateProduct = (inicialData, data) => {
     if (Object.keys(data).length === 0) {
       setIsDialogOpen(false);
       showAlert('The values are the same as those of the product.', 'info');
       return;
     }
-    if(!data.category){data.category = updateData[0].category}
-    if(!data.platform){data.platform = updateData[0].platform}
-    if(!data.pegi){data.pegi = updateData[0].pegi}
-    if(!data.productTitle){data.productTitle = updateData[0].productTitle}
-    if(!data.price){data.price = updateData[0].price}
-    if(!data.weight){data.weight = updateData[0].weight}
-    if(!data.stock){data.stock = updateData[0].stock}
-    if(!data.description){data.description = updateData[0].description}
-    if(!data.isDigital){data.isDigital = updateData[0].isDigital}
+    if(!data.category){data.category = inicialData.category}
+    if(!data.platform){data.platform = inicialData.platform}
+    if(!data.pegi){data.pegi = inicialData.pegi}
+    if(!data.productTitle){data.productTitle = inicialData.productTitle}
+    if(!data.price){data.price = inicialData.price}
+    if(!data.weight){data.weight = inicialData.weight}
+    if(!data.stock){data.stock = inicialData.stock}
+    if(!data.description){data.description = inicialData.description}
+    if(!data.isDigital){data.isDigital = inicialData.isDigital}
 
     const isDigital = data.digital === 'digital' ? true : false;
+    const isDeleted = inicialData.deleted === 'Yes' ? true : false;
 
-    ProductsService.updateProducts(uuid, {
+    ProductsService.updateProducts(inicialData.uuid, {
       category: data.category,
       platform: data.platform,
       pegi: data.pegi,
@@ -199,8 +208,8 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       stock: data.stock,
       description: data.description,
       isDigital: isDigital,
-      image: "a",
-      isDeleted: false
+      image: "image1",
+      isDeleted: isDeleted
     })
       .then((response) => {
         window.location.reload();
@@ -222,7 +231,7 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       />
 
       <div className="AddDataDialogTitle">
-        <DialogTitle>Agregar Datos</DialogTitle>
+        <DialogTitle>Update Data</DialogTitle>
       </div>
       <DialogContent className="AddData-container">
         <FormControl component="fieldset">
@@ -274,10 +283,10 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       <DialogActions>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <Button onClick={handleClose} color="primary" sx={{ marginRight: '30px' }}>
-            Cancelar
+            Cancel
           </Button>
           <Button onClick={handleOpenDialog} color="primary">
-            Actualizar
+            Update
           </Button>
         </Box>
       </DialogActions>
