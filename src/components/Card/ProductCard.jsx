@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Card,
   CardContent,
-  CardMedia,
+  CardMedia, 
   Typography,
   CardActions,
   IconButton,
@@ -12,7 +12,19 @@ import {
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InfoIcon from '@mui/icons-material/Info';
 import "./ProductCard.css";
-function ProductCard({ props, onAddToCart }) {
+import CartService from '../../services/cartService';
+
+
+function ProductCard({ props}) {
+
+  const addToCart = () => {
+    CartService.addToCart(props.uuid)
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => console.error('Error al agregar al carrito', error));
+  };
+
   return (
     <div className='product-card'>
       <Card className='custom-card' sx={{ backgroundColor: 'orange', color: 'white' }}>
@@ -38,8 +50,8 @@ function ProductCard({ props, onAddToCart }) {
         <div className='card-actions'>
           <CardActions>
             <Tooltip title="Add to Cart" arrow>
-              <IconButton aria-label="add to favorites" className='iconCard' style={{ color: 'red' }}>
-                <ShoppingCartIcon />
+              <IconButton aria-label="add to favorites" className='iconCard' style={{ color: 'red' }} onClick={addToCart}>
+                <ShoppingCartIcon/>
               </IconButton>
             </Tooltip>
             

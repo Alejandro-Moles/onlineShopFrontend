@@ -157,7 +157,7 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
         window.location.reload();
       })
       .catch((error) => {
-        showAlert('There has been an error when updating the delivery', 'error');
+        showAlert('There has been an error when updating the delivery', error);
       });
   };
 
