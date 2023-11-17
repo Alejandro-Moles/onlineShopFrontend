@@ -24,3 +24,27 @@
 #locationIcon:hover{
     color: #b83400
 }
+
+.cart-item-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.user_content{
+    display: flex;
+}
+
+.locationInfo {
+    font-weight: bold;
+    color: #ffffff; /* Cambia el color a tu preferencia */
+    display: inline-block; /* Esto mantendrá el elemento en línea con los demás */
+    margin-right: 10px; /* Ajusta según sea necesario para la separación deseada */
+    margin-top: 5px;
+}
+  

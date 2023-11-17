@@ -1,0 +1,18 @@
+/* UserAddressData.css */
+
+.formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Cambiado a flex-start para que no esté centrado verticalmente */
+    height: 100vh;
+  }
+  
+  .form {
+    width: 400px;
+    margin-top: 60px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: aliceblue;
+  }
+  

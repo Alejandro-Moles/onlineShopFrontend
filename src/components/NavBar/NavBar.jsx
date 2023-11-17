@@ -7,21 +7,38 @@ import { Tooltip, Button, Menu, MenuItem } from '@mui/material';
 import "./NavBar.css"
 import CartService from '../../services/cartService';
 import ShopUserService from '../../services/shopUserService';
+import AuthService from '../../services/authService';
+import CartDialog from '../Dialog/CartDialog';
+import CartLogic from '../Scripts/CartLogic';
+import CustomAlert from '../AlertsMessage/CustomAlert';
+import LocationDialog from '../Dialog/LocationDialog';
+import UserAddressService from '../../services/userAddress';
+import MakeOrderDialog from '../Dialog/MakeOrderDialog';
 
 export default function NavBar() {
+    //DATA
     const [cartItems, setCartItems] = useState([]);
+    const [userAddresses, setUserAddresses] = useState([]);
     const [user, setUser] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const fetchCart = () => {
-        CartService.getCart()
-            .then(items => {
-                setCartItems(items);
-                console.log(items); 
-            })
-            .catch(error => console.error('Error al obtener el carrito', error));
+    //DIALOGS
+    const [isCartDialogOpen, setCartDialogOpen] = useState(false);
+    const [isLocationDialogOpen, setLocationDialogOpen] = useState(false);
+    const [isMakeOrderDialogOpen, setIsMakeOrderDialogOpen] = useState(false);
+
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('info');
+
+    const [selectedLocation, setSelectedLocation] = useState(null);
+
+    const showAlert = (message, severity) => {
+        setAlertMessage(message);
+        setAlertSeverity(severity);
+        setIsAlertOpen(true);
     };
-    
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token && !user) {
@@ -33,8 +50,59 @@ export default function NavBar() {
                     console.error('Error al cargar al usuario');
                 })
         }
+        fetchCart();
+        getCart();
     }, [])
 
+    const handleOpenCartDialog = () => {
+        getCart();
+        setCartDialogOpen(true);
+    };
+    
+    const handleCloseCartDialog = () => {
+        setCartDialogOpen(false);
+    };
+
+    const fetchCart = async () => {
+        try {
+            const items = await CartLogic.createCart();
+            setCartItems(items);
+        } catch (error) {
+            console.error('Error al obtener el carrito', error);
+        }
+    };
+
+    const getCart = async () => {
+        try {
+            const items = await CartLogic.getCartItems();
+            setCartItems(items);
+        } catch (error) {
+            console.error('Error al obtener el carrito', error);
+        }
+    };
+
+    const getUserAddress = async (uuid) => {
+        try {
+          const response = await UserAddressService.getUserAddressForUser(uuid);
+          setUserAddresses(response.data);
+        } catch (error) {
+          console.error("Error fetching user addresses:", error);
+        }
+    };
+
+    const handleRemoveItem = (productUuid) => {
+        const updatedCart = cartItems.filter(item => item.productUuid !== productUuid);
+        setCartItems(updatedCart);
+        CartService.updateCart(updatedCart);
+        showAlert("Product removed from cart", "success")
+    };
+    
+    const updateCartItems = (updatedCart) => {
+        setCartItems(updatedCart);
+        CartService.updateCart(updatedCart);
+        showAlert("Product removed from cart", "success")
+    };
+        
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -44,13 +112,41 @@ export default function NavBar() {
     };
 
     const handleLogout = () => {
+        AuthService.logOutUser();
         localStorage.removeItem('token')
         window.location.href = '/';
     };
 
+    const handleOpenLocationDialog = () => {
+        getUserAddress(user.uuid);
+        setLocationDialogOpen(true);
+    };
+    
+    const handleCloseLocationDialog = () => {
+        setLocationDialogOpen(false);
+    };
+
+    const handleCloseOrderDialog = () => {
+        setIsMakeOrderDialogOpen(false);
+    };
+
+    const handleLocationSelect = (location) => {
+        setSelectedLocation(location);
+    };
+
+    const handlePurchase = () => {
+        setIsMakeOrderDialogOpen(true);
+    };
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-main fixed-top" id='my-navBar'>
+            <CustomAlert
+                message={alertMessage}
+                severity={alertSeverity}
+                open={isAlertOpen}
+                onClose={() => setIsAlertOpen(false)}
+                autoHideDuration={2000}
+            />
             <Link className="logo" to={"/"}>
                 <GamepadIcon className="icon" fontSize="large"/>
             </Link>
@@ -82,17 +178,23 @@ export default function NavBar() {
             </div>
 
             <div className="d-flex">
-
-                <div className="location">
-                    <Tooltip title="Location" arrow>
-                        <Link className="btn btn-link" to="/location">
-                            <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" id='locationIcon'/>
-                        </Link>
-                    </Tooltip>
-                </div>
-                
                 {user ? (
-                    <div className="user_split_button">
+                <div className='user_content'>
+                     {selectedLocation && (
+                        <div className='location'>
+                            <div className="locationInfo">
+                                {user.name + " ( " + selectedLocation.street+ " " + selectedLocation.postalCode + " ) "}
+                            </div>
+                        </div>
+                    )}
+                    <div className="location">
+                        <Tooltip title="Location" arrow>
+                            <Link className="btn btn-link" onClick={handleOpenLocationDialog}>
+                                <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" id='locationIcon'/>
+                            </Link>
+                        </Tooltip>
+                    </div>
+                     <div className="user_split_button">
                         <Tooltip title={`Welcome ${user ? user.name : ''}`} arrow>
                             <Button
                                 variant="contained"
@@ -117,6 +219,7 @@ export default function NavBar() {
                             </MenuItem>
                         </Menu>
                     </div>
+                </div>
                 ) : (
                     <Tooltip title="User Account" arrow>
                         <div className="user_png">
@@ -130,10 +233,37 @@ export default function NavBar() {
 
             <div className="cart">
             <Tooltip title="Shopping Cart" arrow>
-                <Link className="btn btn-link" onClick={fetchCart}>
+                <Link className="btn btn-link" onClick={handleOpenCartDialog}>
                     <FontAwesomeIcon icon={faShoppingCart} size="lg" id='cartIcon'/>
                 </Link>
             </Tooltip>
+
+            <CartDialog
+                open={isCartDialogOpen}
+                onClose={handleCloseCartDialog}
+                onPurchase={handlePurchase}
+                cartItems={cartItems}
+                onRemoveItem={handleRemoveItem}
+                updateCartItems={updateCartItems}
+                loggeduser={user}
+                location={selectedLocation}
+            />
+
+            <LocationDialog
+                open={isLocationDialogOpen}
+                onClose={handleCloseLocationDialog}
+                userAddress={userAddresses}
+                user={user}
+                onSelect={handleLocationSelect}
+            />
+
+            <MakeOrderDialog
+                open={isMakeOrderDialogOpen}
+                handleClose={handleCloseOrderDialog}
+                user={user}
+                address={selectedLocation}
+                cartItems={cartItems}
+            />
             </div>
         </nav>
     );

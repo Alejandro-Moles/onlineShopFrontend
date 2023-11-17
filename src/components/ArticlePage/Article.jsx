@@ -20,8 +20,6 @@ function Article() {
     }
   }
 
-  console.log(product);
-
   return (
     <div className="Article">
       <div className='details'>

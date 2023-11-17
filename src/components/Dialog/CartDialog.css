@@ -1,0 +1,5 @@
+.deleting {
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transform: translateX(-100%);
+}

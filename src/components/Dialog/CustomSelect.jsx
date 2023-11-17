@@ -18,7 +18,7 @@ function CustomSelect({ label, value, onChange, options, error }) {
       >
         {options.map((option) => (
           <MenuItem key={option.value} value={option.value}>
-            {option.label}
+            {option.label} 
           </MenuItem>
         ))}
       </Select>
