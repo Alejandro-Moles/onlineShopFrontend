@@ -14,7 +14,7 @@ function SearchPage() {
   const [filterListVisible, setFilterListVisible] = useState(false);
   const [filterMenuVisible, setFilterMenuVisible] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchItems = async () => {
       try {
         const response = await ProductService.getProducts();

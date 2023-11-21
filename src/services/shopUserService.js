@@ -29,11 +29,17 @@ const getShopUser = (uuid) => {
     return axios.get(`${API_URL}shopUsers/profile/${uuid}`);
 }
 
+const updatePassword = (uuid, passwordData) => {
+    const url = `${API_URL}shopUsers/${uuid}`;
+    return axios.put(url, passwordData);
+}
+
 const ShopUserService = {
     getShopUsers,
     updateShopUser,
     getShopUser,
-    getActualShopUser
+    getActualShopUser,
+    updatePassword
 };
 
 

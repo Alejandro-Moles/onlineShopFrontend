@@ -8,11 +8,13 @@ import Signup from './components/Login/Signup';
 import SearchPage from './components/SearchPage/SearchPage';
 import  Article  from './components/ArticlePage/Article';
 import NavBar from './components/NavBar/NavBar';
-import FloatingButton from "./components/FloatingButton/FloatingButton.jsx";
 import DataPage from "./components/Data/DataPage.jsx"
 import UserProfile from './components/Login/Profile.jsx';
 import UserAddressData from './components/Data/UserAddressData.jsx';
-
+import SpeedDialComponent from './components/FloatingButton/SpeedDialComponent.jsx';
+import OrdersPage from './components/Data/OrdersPage.jsx';
+import ViewOrder from './components/Login/ViewOrder.jsx';
+import StatisticsComponent from './components/Data/StadisticPage.jsx';
 
 function App() {
   return (
@@ -27,8 +29,11 @@ function App() {
             <Route path='/dataPage' element={<DataPage/>}/>
             <Route path='/profile/:uuid' element={<UserProfile/>}/>
             <Route path='/userAddressData/:uuid' element={<UserAddressData/>}/>
+            <Route path='/ordersPage' element={<OrdersPage/>}/>
+            <Route path="/viewOrders/:uuid" element={<ViewOrder/>}/>
+            <Route path="/stadisticPage" element={<StatisticsComponent/>}/>
           </Routes>   
-          <FloatingButton/>
+          <SpeedDialComponent/>
       </Routers>
   )    
 }

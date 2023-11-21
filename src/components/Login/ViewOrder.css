@@ -1,0 +1,17 @@
+.listContainer {
+    margin-top: 16px;
+}
+  
+.listItem {
+    margin-bottom: 8px;
+}
+  
+.ListItem{
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.ListItem:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+  

@@ -8,8 +8,14 @@ const createOrderProduct = (orderProductData) => {
     return axios.post(url, orderProductData);
 };
 
+const getOrderProductByOrder = (uuid) => {
+    return axios.get(`${API_URL}ordersProducts/${uuid}`);
+}
+
+
 const OrderProductService = {
     createOrderProduct,
+    getOrderProductByOrder
 }; 
 
 

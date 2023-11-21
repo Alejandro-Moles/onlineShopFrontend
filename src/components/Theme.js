@@ -6,6 +6,9 @@ const theme = createTheme({
     primary: {
       main: '#EC6B22', // Define tu color personalizado
     },
+    secondary: {
+      main: '#2196F3', // Define tu color personalizado
+    },
   },
 });
 

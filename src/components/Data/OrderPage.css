@@ -1,0 +1,38 @@
+.container {
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.textFieldWrapper {
+  width: 500px;
+  text-align: center;
+}
+
+.customTextField {
+  background-color: white;
+  border-radius: 12px;
+}
+
+/* Agregamos estilos para la TableContainer */
+.tableContainer {
+  background-color: white;
+  margin-top: 60px; /* Esto sustituye el marginTop en el estilo inline */
+}
+
+.floating-buttons{
+  padding-top: 50px;
+}
+
+.formStatus {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
+}
+
+.formButton{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
