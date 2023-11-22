@@ -34,12 +34,17 @@ const updatePassword = (uuid, passwordData) => {
     return axios.put(url, passwordData);
 }
 
+const getShopUserStatistic = (uuid) => {
+    return axios.get(`${API_URL}shopUsers/statistic/${uuid}`);
+}
+
 const ShopUserService = {
     getShopUsers,
     updateShopUser,
     getShopUser,
     getActualShopUser,
-    updatePassword
+    updatePassword,
+    getShopUserStatistic
 };
 
 

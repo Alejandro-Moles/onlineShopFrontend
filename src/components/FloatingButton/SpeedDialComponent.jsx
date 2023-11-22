@@ -37,6 +37,10 @@ const SpeedDialComponent = () => {
     if (action === 'orders') {
       navigate('/ordersPage');
     }
+
+    if (action === 'stadistic') {
+      navigate('/stadisticPage');
+    }
   };
 
   const actions = [

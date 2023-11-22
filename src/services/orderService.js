@@ -24,12 +24,18 @@ const updateOrder = (uuid, status) => {
     return axios.put(url);
 }
 
+const getRevenueStatistic = (dateSelector) => {
+    const url = `${API_URL}orders/revenueStatistic`;
+    return axios.post(url, dateSelector);
+}
+
 const OrderService = {
     getOrders,
     createOrder,
     getOrder,
     updateOrder,
-    getAllOrderforUser
+    getAllOrderforUser,
+    getRevenueStatistic
 }; 
 
 

@@ -20,11 +20,16 @@ const createProduct = (productData) => {
     return axios.post(url, productData);
 };
 
+const getTopProducts = () => {
+    return axios.get(API_URL + "products/topProducts");
+};
+
 const ProductService = {
     getProducts,
     getProduct,
     updateProducts,
-    createProduct
+    createProduct,
+    getTopProducts
 }; 
 
 
