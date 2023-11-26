@@ -13,7 +13,8 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CustomAlert from '../AlertsMessage/CustomAlert';
-import './CartDialog.css';
+import './css/CartDialog.css';
+import CartLogic from '../../scripts/CartLogic';
 
 const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, updateCartItems, loggeduser, location }) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -36,7 +37,7 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
     }
   };
 
-  const handleDeleteConfirmation = () => {
+  const handleDeleteConfirmation = async () => {
     if (selectedItem) {
       const updatedQuantity = selectedItem.quantity - quantityToDelete;
       const newQuantity = Math.max(updatedQuantity, 0);
@@ -50,9 +51,18 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
           item.productUuid === updatedItem.productUuid ? updatedItem : item
         );
         updateCartItems(updatedCart);
+        console.log(quantityToDelete)
+        try {
+          await CartLogic.updateProductStock(
+            updatedItem.productUuid,
+            quantityToDelete,
+            true
+          );
+        } catch (error) {
+          console.error("Error updating product stock:", error);
+        }
         handleCancelDelete();
       }
-      
     }
   };
 
@@ -83,40 +93,42 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
   return (
     <Dialog open={open} onClose={onClose}>
       <CustomAlert
-          message={alertMessage}
-          severity={alertSeverity}
-          open={isAlertOpen}
-          onClose={() => setIsAlertOpen(false)}
-          autoHideDuration={2000}
+        message={alertMessage}
+        severity={alertSeverity}
+        open={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        autoHideDuration={2000}
       />
-
+  
       <DialogTitle>Your Shopping Cart</DialogTitle>
       <DialogContent>
-        <List>
-          {/* Comprobar si cartItems esta lleno */}
-          {cartItems.map((item) => (
-            <ListItem
-              key={item.productUuid}
-              className={selectedItem?.productUuid === item.productUuid ? 'deleting' : ''}
-            >
-              <ListItemText primary={item.title} secondary={`Quantity: ${item.quantity}`} />
-              <IconButton onClick={(e) => { e.stopPropagation(); handleRemoveItemClick(item); }}>
-                <DeleteIcon />
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
+        {cartItems.length > 0 ? (
+          <List>
+            {cartItems.map((item) => (
+              <ListItem
+                key={item.productUuid}
+                className={selectedItem?.productUuid === item.productUuid ? 'deleting' : ''}
+              >
+                <ListItemText primary={item.title} secondary={`Quantity: ${item.quantity}`} />
+                <IconButton onClick={(e) => { e.stopPropagation(); handleRemoveItemClick(item); }}>
+                  <DeleteIcon />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <p>Your cart is empty.</p>
+        )}
       </DialogContent>
-
-     {isPurchaseButtonActive && (
+  
+      {isPurchaseButtonActive && (
         <DialogActions style={{ justifyContent: 'center' }}>
           <Button onClick={handlePurchase} color="primary">
             Purchase
           </Button>
         </DialogActions>
       )}
-          
-      {/* Confirmation Dialog */}
+  
       <Dialog open={!!selectedItem} onClose={handleCancelDelete}>
         <DialogTitle>{`How many ${selectedItem?.title} do you want to delete?`}</DialogTitle>
         <DialogContent>
@@ -125,7 +137,8 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
             label="Quantity"
             value={quantityToDelete}
             onChange={(e) => setQuantityToDelete(parseInt(e.target.value, 10) || 1)}
-            inputProps={{ min: 1 }}
+            inputProps={{ min: 1, max: selectedItem?.quantity || 1 }}
+            fullWidth  
           />
         </DialogContent>
         <DialogActions>
@@ -137,8 +150,6 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
           </Button>
         </DialogActions>
       </Dialog>
-
-
     </Dialog>
   );
 };

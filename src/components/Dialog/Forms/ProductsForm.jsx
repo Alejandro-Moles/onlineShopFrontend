@@ -5,9 +5,9 @@ import {
   FormControl,
   InputAdornment,
 } from '@mui/material';
-import { fetchCategories, fetchPlatforms } from '../../loadData';
+import { fetchAvailableCategories, fetchAvailablePlatforms } from '../../../scripts/loadData';
 import CustomSelect from '../CustomSelect';
-import "../AddDataDialog.css";
+import "../css/AddDataDialog.css";
 
 
 function ProductForm({ formData, handleChange, updateData }) {
@@ -17,8 +17,8 @@ function ProductForm({ formData, handleChange, updateData }) {
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      const fetchedCategories = await fetchCategories();
-      const fetchedPlatforms = await fetchPlatforms();
+      const fetchedCategories = await fetchAvailableCategories();
+      const fetchedPlatforms = await fetchAvailablePlatforms();
       setCategories(fetchedCategories);
       setPlatforms(fetchedPlatforms);
     };

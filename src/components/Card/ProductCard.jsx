@@ -12,8 +12,9 @@ import {
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InfoIcon from '@mui/icons-material/Info';
 import "./ProductCard.css";
-import CartLogic from '../Scripts/CartLogic';
+import CartLogic from '../../scripts/CartLogic';
 import CustomAlert from '../AlertsMessage/CustomAlert';
+import { OutOfStockError } from '../../scripts/Errors/error'
 
 
 function ProductCard({ props}) {
@@ -22,9 +23,17 @@ function ProductCard({ props}) {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState('info');
 
-  const addToCart = () => {
-    CartLogic.addToCart(props.uuid)
-    showAlert("Product added to cart", "success")
+  const addToCart = async () => {
+    try {
+      await CartLogic.addToCart(props.uuid);
+      showAlert("Product added to cart", "success");
+    } catch (error) {
+      if (error instanceof OutOfStockError) {
+        showAlert("Product out of stock. Cannot add to cart.", "warning");
+      } else {
+        showAlert("Failed to add product to cart.", "error");
+      }
+    }
   };
 
   const showAlert = (message, severity) => {

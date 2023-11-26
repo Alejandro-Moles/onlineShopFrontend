@@ -29,7 +29,7 @@ const addToCart = (productUuid) => {
     const url = `${API_URL}cart/add`;
     return axios.post(url, { productUuid }, { withCredentials: true })
         .then(response => {
-            return response.data;
+            return {response, productUuid};
         })
         .catch(error => {
             console.error('Error al agregar al carrito', error);
@@ -59,13 +59,25 @@ const updateCart = (cartList) => {
         });
 };
 
+const clearCart = () => {
+    const url = `${API_URL}cart/clear`;
+    return axios.post(url, { withCredentials: true })
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error al limpiar al carrito', error);
+            throw error;
+        });
+};
 
 const CartService = {
     createCart,
     addToCart,
     removeFromCart,
     getCart,
-    updateCart
+    updateCart,
+    clearCart
 };
 
 export default CartService;

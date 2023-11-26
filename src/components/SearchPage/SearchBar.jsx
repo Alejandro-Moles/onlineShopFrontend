@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import "./SearchPage.css";
+import "./css/SearchPage.css";
 import SearchIcon from '@mui/icons-material/Search';
 import ProductService from '../../services/productService';
 import MenuIcon from '@mui/icons-material/Menu';

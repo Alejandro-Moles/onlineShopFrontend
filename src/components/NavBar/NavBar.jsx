@@ -9,7 +9,7 @@ import CartService from '../../services/cartService';
 import ShopUserService from '../../services/shopUserService';
 import AuthService from '../../services/authService';
 import CartDialog from '../Dialog/CartDialog';
-import CartLogic from '../Scripts/CartLogic';
+import CartLogic from '../../scripts/CartLogic';
 import CustomAlert from '../AlertsMessage/CustomAlert';
 import LocationDialog from '../Dialog/LocationDialog';
 import UserAddressService from '../../services/userAddress';
@@ -90,11 +90,23 @@ export default function NavBar() {
         }
     };
 
-    const handleRemoveItem = (productUuid) => {
-        const updatedCart = cartItems.filter(item => item.productUuid !== productUuid);
-        setCartItems(updatedCart);
-        CartService.updateCart(updatedCart);
-        showAlert("Product removed from cart", "success")
+    const handleRemoveItem = async (productUuid) => {
+        try {
+            let updatedCart = cartItems.filter(item => item.productUuid !== productUuid);
+            setCartItems(updatedCart);
+            CartService.updateCart(updatedCart);
+    
+            const removedItem = cartItems.find(item => item.productUuid === productUuid);
+            if (removedItem) {
+                await CartLogic.updateProductStock(productUuid, removedItem.quantity, true);
+                showAlert("Product removed from cart", "success");
+            } else {
+                showAlert("Product removed from cart", "success");
+            }
+        } catch (error) {
+            console.error("Error handling remove item:", error);
+            showAlert("Error handling remove item", "error");
+        }
     };
     
     const updateCartItems = (updatedCart) => {
@@ -136,6 +148,17 @@ export default function NavBar() {
 
     const handlePurchase = () => {
         setIsMakeOrderDialogOpen(true);
+    };
+
+    const removeMultipleItems = async () => {
+        let i = 0;
+        let result = []; 
+        for (const item of cartItems) {
+            result.push(item.productUuid);
+        }
+        const filteredCartItems = cartItems.filter(item => !result.includes(item.productUuid));
+        setCartItems(filteredCartItems);
+        CartService.updateCart(filteredCartItems);
     };
 
     return (
@@ -263,6 +286,7 @@ export default function NavBar() {
                 user={user}
                 address={selectedLocation}
                 cartItems={cartItems}
+                clearCart={removeMultipleItems}
             />
             </div>
         </nav>

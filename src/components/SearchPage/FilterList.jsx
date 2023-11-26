@@ -1,8 +1,7 @@
 // FilterList.js
 import React, { useState, useEffect } from 'react';
-import CategoriesService from '../../services/categoriesService';
-import PlatformsService from '../../services/platformsService';
-import './FilterList.css';
+import './css/FilterList.css';
+import { fetchAvailableCategories, fetchAvailablePlatforms } from '../../scripts/loadData';
 
 export const FilterList = ({ onFilterChange }) => {
   const [categories, setCategories] = useState([]);
@@ -13,27 +12,13 @@ export const FilterList = ({ onFilterChange }) => {
   const [selectedPegi, setSelectedPEGI] = useState("");
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await CategoriesService.getCategories();
-        setCategories(response.data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
+    const fetchInitialData = async () => {
+      const fetchedCategories = await fetchAvailableCategories();
+      const fetchedPlatforms = await fetchAvailablePlatforms();
+      setCategories(fetchedCategories);
+      setPlatforms(fetchedPlatforms);
     };
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchPlatforms = async () => {
-      try {
-        const response = await PlatformsService.getPlatforms();
-        setPlatforms(response.data);
-      } catch (error) {
-        console.error('Error fetching platforms:', error);
-      }
-    };
-    fetchPlatforms();
+    fetchInitialData();
   }, []);
 
   const handleSelectChangeCategory = (event) => {

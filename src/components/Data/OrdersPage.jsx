@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { InputAdornment, Button, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Select, MenuItem, Grid, FormControl, InputLabel} from '@mui/material';
-import "./OrderPage.css";
+import "./css/OrderPage.css";
 import OrderService from '../../services/orderService';
 import { DataGrid } from '@mui/x-data-grid';
 import { Fab } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import { ThemeProvider } from '@mui/material/styles';
-import theme from '../Theme';
+import theme from '../../scripts/Theme';
 import OrderDetailsDialog from '../Dialog/OrderDetailsDialog';
 import OrderStatusService from '../../services/orderStatusService';
 import CustomAlert from '../AlertsMessage/CustomAlert';
+import ShopUserService from '../../services/shopUserService';
 
 const OrdersPage = () => {
     const [input, setInput] = useState("");
@@ -24,6 +25,21 @@ const OrdersPage = () => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertSeverity, setAlertSeverity] = useState('info');
+
+    const [isEmployee, setIsEmployee] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            ShopUserService.getActualShopUser(token)
+                .then(response => {
+                    setIsEmployee(response.data.roles.includes('EMPLOYEE'));
+                })
+                .catch(error => {
+                    console.error('Error al cargar al usuario');
+                })
+        }
+    }, []);
 
     const [formData, setFormData] = useState({
         orderStatus: '',
@@ -128,6 +144,10 @@ const OrdersPage = () => {
             console.error('Error', error)
         }
     };
+
+    if (!isEmployee) {
+        return null;
+    }
 
     return (
         <ThemeProvider theme={theme}>

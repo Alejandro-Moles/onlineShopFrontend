@@ -1,5 +1,5 @@
-import OrderService from "../../services/orderService";
-import OrderProductService from "../../services/orderProductService";
+import OrderService from "../services/orderService";
+import OrderProductService from "../services/orderProductService";
 
 const getOrderAndPaymentStatus = (selectedPayment) => {
     let paymentStatus;
@@ -47,7 +47,6 @@ const placeOrder = async (address, user, selectedDelivery, selectedPayment, cart
 
 const processOrderItems = async (cartItems, orderUuid) => {
     for (const item of cartItems) {
-        console.log('Processing Order Item:', item);
         const orderProductData = {
             orderUUID: orderUuid,
             productTitle: item.title,

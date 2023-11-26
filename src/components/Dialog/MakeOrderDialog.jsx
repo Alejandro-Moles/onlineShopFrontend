@@ -3,14 +3,14 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { TextField, FormControl, MenuItem, InputLabel, Select, Button, CircularProgress  } from '@mui/material';
-import "./MakeOrderDialog.css";
+import "./css/MakeOrderDialog.css";
 import DeliveriesService from '../../services/deliveryService';
 import PaymentService from '../../services/paymentService';
 import CustomAlert from '../AlertsMessage/CustomAlert';
-import "../Scripts/OrderLogic"
-import OrderLogic from '../Scripts/OrderLogic';
+import OrderLogic from '../../scripts/OrderLogic';
 
-const MakeOrderDialog = ({ open, handleClose, user, address, cartItems }) => {
+
+const MakeOrderDialog = ({ open, handleClose, user, address, cartItems, clearCart }) => {
   const [apartment, setApartment] = useState(address?.apartament || '');
   const [home, setHome] = useState(address?.home || '');
   const [street, setStreet] = useState(address?.street || '');
@@ -92,17 +92,19 @@ const MakeOrderDialog = ({ open, handleClose, user, address, cartItems }) => {
     fetchPayment();
   }, [address, user]);
 
-
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     if (!selectedDelivery || !selectedPayment) {
       showAlert("You must select a payment and delivery method", "error");
       return;
     }
+    doOrder();
+  };
+
+  const doOrder = async () =>{
     setIsLoading(true);
     const orderResult = await OrderLogic.placeOrder(address, user, selectedDelivery, selectedPayment, cartItems);
-
-    setTimeout(() => {
+    setTimeout(async () => {
       setIsLoading(false);
       if (orderResult.success) {
         showAlert(orderResult.message, "success");
@@ -110,7 +112,8 @@ const MakeOrderDialog = ({ open, handleClose, user, address, cartItems }) => {
         showAlert(orderResult.message, "error");
       }
     }, 1000);
-  };
+    clearCart();
+  }
 
   const handleDeliveryChange = (e) => {
     setSelectedDelivery(e.target.value);

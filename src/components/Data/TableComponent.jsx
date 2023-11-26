@@ -4,7 +4,7 @@ import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import "./TableComponent.css";
+import "./css/TableComponent.css";
 import ConfirmationDialog from '../Dialog/ConfirmationDialog';
 import AddDataDialog from '../Dialog/AddDataDialog';
 import UpdateDataDialog from '../Dialog/UpdateData';

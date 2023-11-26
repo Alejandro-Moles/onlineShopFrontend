@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, Paper } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import "./DataPage.css"
-import theme from '../Theme';
+import "./css/DataPage.css"
+import theme from '../../scripts/Theme';
 import TableComponent from './TableComponent';
 import CategoriesService from '../../services/categoriesService';
 import PlatformsService from '../../services/platformsService';
@@ -11,12 +11,14 @@ import DeliveriesService from '../../services/deliveryService';
 import PaymentService from '../../services/paymentService';
 import GenreService from '../../services/genreService';
 import AlertMessage from '../AlertsMessage/AlertMessage';
+import ShopUserService from '../../services/shopUserService';
 
 const DataPage = () => { 
-  //ALERT MESSAGE
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState('info');
+
+  const [isEmployee, setIsEmployee] = useState(false);
 
   const showAlertMessage = (message, severity) => {
     setAlertMessage(message);
@@ -24,7 +26,6 @@ const DataPage = () => {
     setIsAlertOpen(true);
   };
   
-  //TABLES
   const [tableData, setTableData] = useState({
     categories: [],
     platforms: [],
@@ -121,7 +122,6 @@ const DataPage = () => {
         console.error(`Error fetching ${key}:`, error);
       }
     };
-
     const fetchDataFor = (service, mapData, key) => fetchData(service, mapData, key);
 
     fetchDataFor(CategoriesService.getCategories, (category, index) => ({
@@ -174,6 +174,17 @@ const DataPage = () => {
       genreType: genres.type,
       deleted: genres.isDeleted ? 'Yes' : 'No',
     }), 'genres');
+
+    const token = localStorage.getItem('token');
+    if (token) {
+        ShopUserService.getActualShopUser(token)
+            .then(response => {
+                setIsEmployee(response.data.roles.includes('EMPLOYEE'));
+            })
+            .catch(error => {
+                console.error('Error al cargar al usuario');
+            })
+    }
   }, []);
 
   const tableColumns = [
@@ -239,12 +250,15 @@ const DataPage = () => {
     deleteGenre,
   ];
 
-  //SELECT TABLES
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  if (!isEmployee) {
+    return null;
+  }
 
   return (
     <ThemeProvider theme={theme}>

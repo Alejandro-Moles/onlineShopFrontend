@@ -7,7 +7,7 @@ import {
   Button,
   FormControl,
 } from '@mui/material';
-import "./AddDataDialog.css";
+import "./css/AddDataDialog.css";
 import Box from '@mui/material/Box';
 import CategoriesService from '../../services/categoriesService';
 import PlatformsService from '../../services/platformsService';

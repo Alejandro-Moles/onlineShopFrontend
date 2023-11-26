@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { TextField, Select, MenuItem, InputLabel, FormControl, Button, Grid } from '@mui/material';
-import './UserAddressData.css';
+import './css/UserAddressData.css';
 import ShopUserService from '../../services/shopUserService';
-import PostalCodeService from '../../services/postalCodeService';
 import CustomAlert from '../AlertsMessage/CustomAlert';
 import UserAddressService from '../../services/userAddress'
+import { fetchAvailablePostalCode } from '../../scripts/loadData';
 
 const UserAddressData = () => {
     const { uuid } = useParams();
@@ -30,15 +30,6 @@ const UserAddressData = () => {
         setIsAlertOpen(true);
     };
 
-    const fetchPostalCode = async () => {
-        try {
-        const response = await PostalCodeService.getPostalCode();
-        setPostalCode(response.data);
-        } catch (error) {
-        console.error('Error fetching postal code:', error);
-        }
-    };
-
     const fetchUser = async () => {
         try {
         const response = await ShopUserService.getShopUser(uuid);
@@ -50,8 +41,12 @@ const UserAddressData = () => {
 
     useEffect(() => {
         fetchUser();
-        fetchPostalCode();
-    }, [uuid]);
+        const fetchInitialData = async () => {
+            const fetchedPostalCode = await fetchAvailablePostalCode();
+            setPostalCode(fetchedPostalCode);
+        };
+        fetchInitialData();
+    }, []);
 
     const handleChange = (field) => (event) => {
         setFormData({ ...formData, [field]: event.target.value });

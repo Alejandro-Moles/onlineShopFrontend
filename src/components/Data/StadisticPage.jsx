@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ProductService from '../../services/productService';
-import Bars from '../Scripts/Bar';
+import Bars from '../Charts/Bar'
 import { Typography, Container, Paper, Box, Grid, Tabs, Tab, TextField, Button, MenuItem  } from '@mui/material';
 import ShopUserService from '../../services/shopUserService';
 import OrderService from '../../services/orderService';
-import Pies from '../Scripts/PiesChart';
-import LinesChart from '../Scripts/LinesChart';
+import Pies from '../Charts/PiesChart'
+import LinesChart from '../Charts/LinesChart';
 import CustomAlert from '../AlertsMessage/CustomAlert';
-
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -32,6 +31,8 @@ const StatisticsComponent = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState('info');
+
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const options = {
       responsive: true,
@@ -61,6 +62,16 @@ const StatisticsComponent = () => {
         console.error('Error al obtener los productos:', error);
       });
     
+      const token = localStorage.getItem('token');
+      if (token) {
+          ShopUserService.getActualShopUser(token)
+              .then(response => {
+                  setIsAdmin(response.data.roles.includes('ADMIN'));
+              })
+              .catch(error => {
+                  console.error('Error al cargar al usuario');
+              })
+      }
   }, []);
 
   const fetchUserStatistic = async (uuid) => {
@@ -129,6 +140,10 @@ const StatisticsComponent = () => {
     setAlertSeverity(severity);
     setIsAlertOpen(true);
   };
+
+  if (!isAdmin) {
+    return null;
+  }
 
   return (
     <Container maxWidth="lg" style={{ marginTop: '50px' }}>

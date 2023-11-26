@@ -6,6 +6,10 @@ const getCategories = () => {
     return axios.get(API_URL + "categories");
 };
 
+const getAvailableCategories = () => {
+    return axios.get(API_URL + "categories/availableCategory");
+};
+
 const updateCategories = (uuid, categoryData) => {
     const url = `${API_URL}categories/${uuid}`;
     return axios.put(url, categoryData);
@@ -19,7 +23,8 @@ const createCategory = (categoryData) => {
 const CategoriesService = {
     getCategories,
     updateCategories,
-    createCategory
+    createCategory,
+    getAvailableCategories
 };
 
 export default CategoriesService;

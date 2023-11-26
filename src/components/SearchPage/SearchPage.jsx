@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './SearchPage.css';
+import './css/SearchPage.css';
 import SearchBar from './SearchBar';
 import ProductList from '../ProductList/ProductList';
 import ProductService from '../../services/productService';
@@ -17,7 +17,7 @@ function SearchPage() {
   useEffect(() => { 
     const fetchItems = async () => {
       try {
-        const response = await ProductService.getProducts();
+        const response = await ProductService.getAvaliableProducts();
         setItems(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -25,7 +25,7 @@ function SearchPage() {
     };
     fetchItems();
   }, []);
-
+ 
   const toggleFilterList = () => {
     setFilterListVisible(!filterListVisible);
   };

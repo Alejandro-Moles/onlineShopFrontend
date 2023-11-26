@@ -11,9 +11,14 @@ const updatePostalCode = (uuid, postalCodeData) => {
     return axios.put(url, postalCodeData);
 }
 
+const getAvailablePostalCode = () => {
+    return axios.get(API_URL + "postalCodes/availablePostalCodes");
+};
+
 const PostalCodeService = {
     getPostalCode,
-    updatePostalCode
+    updatePostalCode,
+    getAvailablePostalCode
 };
 
 export default PostalCodeService;

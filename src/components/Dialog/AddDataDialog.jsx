@@ -7,7 +7,7 @@ import {
   Button,
   FormControl,
 } from '@mui/material';
-import "./AddDataDialog.css";
+import "./css/AddDataDialog.css";
 import Box from '@mui/material/Box';
 import CategoriesService from '../../services/categoriesService';
 import PlatformsService from '../../services/platformsService';
@@ -165,7 +165,6 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
     }
 
     const isDigital = formData.digital === 'digital' ? true : false;
-    console.log(isDigital);
 
     const productData = {
       category: formData.category,
@@ -178,6 +177,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       isDigital: isDigital,
       description: formData.description,
       image: "image1",
+      isDeleted: false,
     };
     try {
       const response = await ProductsService.createProduct(productData);

@@ -1,24 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   SpeedDial,
   SpeedDialAction,
 } from '@mui/material';
-
 import {
   Inventory2 as InventoryIcon,
-  Delete as DeleteIcon,
-  Save as SaveIcon,
   Folder as FolderIcon,
   HistoryEdu as HistoryEduIcon,
-
 } from '@mui/icons-material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import ShopUserService from '../../services/shopUserService';
+import FolderSharedIcon from '@mui/icons-material/FolderShared';
 
 const SpeedDialComponent = () => {
   const [open, setOpen] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isEmployee, setIsEmployee] = useState(false);
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token && !user) {
+        ShopUserService.getActualShopUser(token)
+            .then(response => {
+                setUser(response.data);
+                setIsAdmin(response.data.roles.includes('ADMIN'));
+                setIsEmployee(response.data.roles.includes('EMPLOYEE'));
+            })
+            .catch(error => {
+                console.error('Error al cargar al usuario');
+            })
+    }
+  }, [])
 
   const handleClose = () => {
     setOpen(false);
@@ -41,13 +57,25 @@ const SpeedDialComponent = () => {
     if (action === 'stadistic') {
       navigate('/stadisticPage');
     }
+
+    if (action === 'users') {
+      navigate('/userTablePage');
+    }
   };
 
   const actions = [
     { icon: <InventoryIcon  />, name: 'Products', action: 'products' },
     { icon: <HistoryEduIcon />, name: 'Orders', action: 'orders' },
-    { icon: <TrendingUpIcon/>, name: 'Stadistic', action: 'stadistic'}
   ];
+
+  if (isAdmin) {
+    actions.push({ icon: <FolderSharedIcon />, name: 'Users', action: 'users' });
+    actions.push({ icon: <TrendingUpIcon />, name: 'Stadistic', action: 'stadistic' });
+  }
+
+  if (!isEmployee) {
+    return null;
+  }
 
   return (
     <SpeedDial
@@ -81,6 +109,7 @@ const SpeedDialComponent = () => {
           key={action.name}
           icon={action.icon}
           tooltipTitle={action.name}
+          tooltipOpen
           onClick={() => handleAction(action.action)}
         />
       ))}
@@ -89,3 +118,4 @@ const SpeedDialComponent = () => {
 };
 
 export default SpeedDialComponent;
+

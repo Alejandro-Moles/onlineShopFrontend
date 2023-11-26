@@ -12,7 +12,7 @@ import {
 import { FixedSizeList } from 'react-window';
 import InfoIcon from '@mui/icons-material/Info';
 import OrderDetailsDialog from '../Dialog/OrderDetailsDialog';
-import "./ViewOrder.css"
+import "./css/ViewOrder.css"
 
 const ViewOrder = () => {
   const { uuid } = useParams();

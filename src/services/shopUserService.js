@@ -38,13 +38,19 @@ const getShopUserStatistic = (uuid) => {
     return axios.get(`${API_URL}shopUsers/statistic/${uuid}`);
 }
 
+const updateShopUserRoles = (uuid, listRoles) => {
+    const url = `${API_URL}shopUsers/assignRoles/${uuid}`;
+    return axios.put(url, listRoles);
+}
+
 const ShopUserService = {
     getShopUsers,
     updateShopUser,
     getShopUser,
     getActualShopUser,
     updatePassword,
-    getShopUserStatistic
+    getShopUserStatistic,
+    updateShopUserRoles
 };
 
 

@@ -15,6 +15,7 @@ import SpeedDialComponent from './components/FloatingButton/SpeedDialComponent.j
 import OrdersPage from './components/Data/OrdersPage.jsx';
 import ViewOrder from './components/Login/ViewOrder.jsx';
 import StatisticsComponent from './components/Data/StadisticPage.jsx';
+import UserPage from './components/Data/UsersPage.jsx';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path='/ordersPage' element={<OrdersPage/>}/>
             <Route path="/viewOrders/:uuid" element={<ViewOrder/>}/>
             <Route path="/stadisticPage" element={<StatisticsComponent/>}/>
+            <Route path="/userTablePage" element={<UserPage/>}/>
           </Routes>   
           <SpeedDialComponent/>
       </Routers>

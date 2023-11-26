@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import "./LoginSignup.css";
+import "./css/LoginSignup.css";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/authService";
 import CustomAlert from '../AlertsMessage/CustomAlert';

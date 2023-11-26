@@ -16,10 +16,15 @@ const createPlatform = (platformData) => {
     return axios.post(url, platformData);
 };
 
+const getAvailablePlatforms = () => {
+    return axios.get(API_URL + "platforms/availablePlatform");
+};
+
 const PlatformsService = {
     getPlatforms,
     updatePlatforms,
-    createPlatform
+    createPlatform,
+    getAvailablePlatforms
 };
 
 export default PlatformsService;

@@ -4,7 +4,7 @@ import { Avatar, Typography, Paper, Grid, Button, IconButton } from "@mui/materi
 import { Link } from "react-router-dom";
 import ShopUserService from "../../services/shopUserService";
 import { ThemeProvider } from '@mui/material/styles';
-import theme from '../Theme';
+import theme from '../../scripts/Theme';
 import EditProfileDialog from '../Dialog/EditingProfileDialog';
 import EditIcon from '@mui/icons-material/Edit';
 
