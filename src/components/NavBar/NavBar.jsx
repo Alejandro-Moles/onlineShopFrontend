@@ -16,17 +16,15 @@ import UserAddressService from '../../services/userAddress';
 import MakeOrderDialog from '../Dialog/MakeOrderDialog';
 
 export default function NavBar() {
-    //DATA
     const [cartItems, setCartItems] = useState([]);
     const [userAddresses, setUserAddresses] = useState([]);
     const [user, setUser] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
 
-    //DIALOGS
     const [isCartDialogOpen, setCartDialogOpen] = useState(false);
     const [isLocationDialogOpen, setLocationDialogOpen] = useState(false);
     const [isMakeOrderDialogOpen, setIsMakeOrderDialogOpen] = useState(false);
-
+ 
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertSeverity, setAlertSeverity] = useState('info');

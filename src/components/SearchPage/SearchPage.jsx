@@ -30,19 +30,18 @@ function SearchPage() {
     setFilterListVisible(!filterListVisible);
   };
 
-  const handleFilterChange = (category, platform, maxPrice, pegi) => {
+  const handleFilterChange = (category, platform, maxPrice, pegi, genres) => {
     setSelectedCategory(category);
     setSelectedPlatform(platform);
     setSelectedPEGI(pegi);
 
     const filteredResults = items.filter((item) => {
-      
       const categoryMatch = category ? item.category === category : true;
       const platformMatch = platform ? item.platform === platform : true;
       const pegiMatch = pegi ? item.pegi == pegi : true;
       const priceMatch = maxPrice ? item.price <= maxPrice : true;
-
-      return categoryMatch && platformMatch && priceMatch && pegiMatch;
+      const genreMatch = genres ? genres.some(genre => item.genres.includes(genre)) : true;
+      return categoryMatch && platformMatch && priceMatch && pegiMatch && genreMatch;
     });
 
     setResults(filteredResults);

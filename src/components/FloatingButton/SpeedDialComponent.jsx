@@ -27,6 +27,7 @@ const SpeedDialComponent = () => {
         ShopUserService.getActualShopUser(token)
             .then(response => {
                 setUser(response.data);
+                console.log(response.data)
                 setIsAdmin(response.data.roles.includes('ADMIN'));
                 setIsEmployee(response.data.roles.includes('EMPLOYEE'));
             })

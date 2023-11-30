@@ -46,7 +46,6 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
     setIsAlertOpen(true);
   };
 
-  //DIALOG
   const [openDialog, setOpenDialog] = useState(false);
   const [formData, setFormData] = useState({});
   const [formErrors, setFormErrors] = useState({});
@@ -185,12 +184,12 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       showAlert('The values are the same as those of the product.', 'info');
       return;
     }
+    
     if(!data.category){data.category = inicialData.category}
     if(!data.platform){data.platform = inicialData.platform}
     if(!data.pegi){data.pegi = inicialData.pegi}
     if(!data.productTitle){data.productTitle = inicialData.productTitle}
     if(!data.price){data.price = inicialData.price}
-    if(!data.weight){data.weight = inicialData.weight}
     if(!data.stock){data.stock = inicialData.stock}
     if(!data.description){data.description = inicialData.description}
     if(!data.isDigital){data.isDigital = inicialData.isDigital}
@@ -204,9 +203,9 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       pegi: data.pegi,
       title: data.productTitle,
       price: data.price,
-      weight: data.weight,
       stock: data.stock,
       description: data.description,
+      genres: data.genres,
       isDigital: isDigital,
       image: "image1",
       isDeleted: isDeleted

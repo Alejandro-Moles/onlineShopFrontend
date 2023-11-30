@@ -4,33 +4,73 @@ import {
   TextField,
   FormControl,
   InputAdornment,
+  Button,
+  Dialog,
+  DialogTitle ,
+  DialogActions, 
+  List, 
+  ListItem, 
+  ListItemText, 
+  Checkbox
 } from '@mui/material';
-import { fetchAvailableCategories, fetchAvailablePlatforms } from '../../../scripts/loadData';
+import { fetchAvailableCategories, fetchAvailablePlatforms, fetchAvailableGenres } from '../../../scripts/loadData';
 import CustomSelect from '../CustomSelect';
 import "../css/AddDataDialog.css";
-
 
 function ProductForm({ formData, handleChange, updateData }) {
   const [categories, setCategories] = useState([]);
   const [platforms, setPlatforms] = useState([]);
   const [formErrors, setFormErrors] = useState({});
+  const [genres, setGenres] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedGenres, setSelectedGenres] = useState(
+    updateData && updateData[0] && updateData[0].genres
+      ? updateData[0].genres.split(',').map(genre => genre.trim())
+      : []
+  );
 
   useEffect(() => {
     const fetchInitialData = async () => {
       const fetchedCategories = await fetchAvailableCategories();
       const fetchedPlatforms = await fetchAvailablePlatforms();
+      const fetchedGenres = await fetchAvailableGenres();
       setCategories(fetchedCategories);
       setPlatforms(fetchedPlatforms);
+      setGenres(fetchedGenres);
     };
 
     fetchInitialData();
   }, []);
 
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleGenreSelection = (genre) => {
+    setSelectedGenres((prevGenres) => {
+      const isSelected = prevGenres.includes(genre);
+      if (isSelected) {
+        return prevGenres.filter((g) => g !== genre);
+      } else {
+        return [...prevGenres, genre];
+      }
+    });
+  };
+
+  const handleAcceptGenres = () => {
+    console.log("Géneros seleccionados:", selectedGenres);
+    handleChange("genres", selectedGenres, "genres");
+    setDialogOpen(false);
+  };
+
   const [platformValue, setPlatformValue] = useState(updateData ? updateData[0].platform : formData.platform || "");
   const [categoryValue, setCategoryValue] = useState(updateData ? updateData[0].category : formData.category || "");
   const [titleValue, setTitleValue] = useState(updateData ? updateData[0].productTitle : formData.productTitle || "");
   const [priceValue, setPriceValue] = useState(updateData ? updateData[0].price : formData.price || "");
-  const [weightValue, setWeightValue] = useState(updateData ? updateData[0].weight : formData.weight || "");
   const [stockValue, setStockValue] = useState(updateData ? updateData[0].stock : formData.stock || "");
   const [pegiValue, setPegiValue] = useState(updateData ? updateData[0].pegi : formData.pegi || "");
   const [digitalValue, setDigitalValue] = useState(updateData ? updateData[0].digital : formData.digital || "");
@@ -191,13 +231,45 @@ function ProductForm({ formData, handleChange, updateData }) {
           <div className="AddDataform-field">{renderSelectExternalData('platform', platforms, "Platform", platformValue)}</div>
           <div className="AddDataform-field">{renderTextField('Title', 'productTitle', titleValue)}</div>
           <div className="AddDataform-field">{renderNumberField('Price', 'price', priceValue)}</div>
-          <div className="AddDataform-field">{renderNumberField('Weight', 'weight', weightValue)}</div>
           <div className="AddDataform-field">{renderNumberField('Stock', 'stock', stockValue)}</div>
           <div className="AddDataform-field">{renderSelectLocalData('pegi', pegiOptions, 'PEGI', pegiValue)}</div>
           <div className="AddDataform-field">{renderSelectLocalData('digital', digitalOptions, 'Digital', digitalValue)}</div>
           <div>{renderTextField('Description', 'description', descriptionValue)}</div>
+          <Button className="AddDataform-field" variant="outlined" color="primary" onClick={handleDialogOpen} fullWidth>
+            Seleccionar Géneros
+          </Button>
         </div>
       </FormControl>
+
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Seleccionar Géneros</DialogTitle>
+        <DialogContent>
+          <List>
+            {genres.map((genre) => (
+            <ListItem key={genre.uuid}>
+              <Checkbox
+                edge="start"
+                tabIndex={-1}
+                disableRipple
+                color="primary"
+                checked={selectedGenres.includes(genre.type)}
+                onChange={() => handleGenreSelection(genre.type)}
+                key={genre.uuid}
+              />
+              <ListItemText primary={genre.type} />
+            </ListItem>
+          ))}
+        </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAcceptGenres} color="primary">
+            Aceptar
+          </Button>
+          <Button onClick={handleDialogClose} color="primary">
+            Cancelar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </DialogContent>
   );
 }

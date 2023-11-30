@@ -1,7 +1,9 @@
 // FilterList.js
 import React, { useState, useEffect } from 'react';
 import './css/FilterList.css';
-import { fetchAvailableCategories, fetchAvailablePlatforms } from '../../scripts/loadData';
+import { fetchAvailableCategories, fetchAvailablePlatforms, fetchAvailableGenres } from '../../scripts/loadData';
+import { Checkbox, List, ListItem, ListItemText, FormControlLabel, Paper  } from '@mui/material';
+
 
 export const FilterList = ({ onFilterChange }) => {
   const [categories, setCategories] = useState([]);
@@ -10,13 +12,18 @@ export const FilterList = ({ onFilterChange }) => {
   const [selectedPlatform, setSelectedPlatform] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedPegi, setSelectedPEGI] = useState("");
+  const [genres, setGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+
 
   useEffect(() => {
     const fetchInitialData = async () => {
       const fetchedCategories = await fetchAvailableCategories();
       const fetchedPlatforms = await fetchAvailablePlatforms();
+      const fetchedGenres = await fetchAvailableGenres();
       setCategories(fetchedCategories);
       setPlatforms(fetchedPlatforms);
+      setGenres(fetchedGenres);
     };
     fetchInitialData();
   }, []);
@@ -35,14 +42,25 @@ export const FilterList = ({ onFilterChange }) => {
 
   const handleMaxPriceChange = (event) => {
     const price = event.target.value;
-    setMaxPrice(price);
-    onFilterChange(selectedCategory, selectedPlatform, price, selectedPegi);
+    const nonNegativePrice = Math.max(0, parseFloat(price));
+    setMaxPrice(nonNegativePrice);
+    onFilterChange(selectedCategory, selectedPlatform, nonNegativePrice, selectedPegi);
   };
 
   const handleSelectChangePEGI = (event) => {
     const selectedValue = event.target.value;
     setSelectedPEGI(selectedValue);
     onFilterChange(selectedCategory, selectedPlatform, maxPrice, selectedValue);
+  };
+
+  const handleCheckboxChange = (genre) => {
+    const updatedGenres = selectedGenres.includes(genre) 
+      ? selectedGenres.filter(selectedGenre => selectedGenre !== genre)
+      : [...selectedGenres, genre];
+
+    setSelectedGenres(updatedGenres);
+    const selectGenre = updatedGenres.map(selectedGenre => selectedGenre.type);
+    onFilterChange(selectedCategory, selectedPlatform, maxPrice, selectedPegi, selectGenre);
   };
 
   return (
@@ -62,7 +80,7 @@ export const FilterList = ({ onFilterChange }) => {
       <div className="select-container">
         <label className="select-label">Platform</label>
         <select className="select" onChange={handleSelectChangePlatform}>
-          <option value="">Select a Platform</option>
+          <option value="">All</option>
           {platforms.map((platform) => (
             <option key={platform.uuid} value={platform.type}>
               {platform.type}
@@ -90,9 +108,28 @@ export const FilterList = ({ onFilterChange }) => {
           className="select"
           value={maxPrice}
           onChange={handleMaxPriceChange}
+          min="0"
         />
       </div>
+
       
+      <div className="select-container">
+        <label className="select-label">Genres</label>
+        <Paper className="genres-container" elevation={3}>
+          <List>
+            {genres.map((genre) => (
+                <ListItem key={genre.uuid}>
+                  <FormControlLabel
+                    control={<Checkbox checked={selectedGenres.includes(genre)} onChange={() => handleCheckboxChange(genre)} />}
+                    label={<ListItemText primary={genre.type} />}
+                />
+                </ListItem>
+            ))}
+          </List>   
+        </Paper>
+      </div>
+
     </div>
+
   );
 };

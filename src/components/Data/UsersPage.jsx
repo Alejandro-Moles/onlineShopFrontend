@@ -8,7 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ShopUserService from '../../services/shopUserService';
 
 const UserPage = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); 
   const [roles, setRoles] = useState([]);
   const [selectionModel, setSelectionModel] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);

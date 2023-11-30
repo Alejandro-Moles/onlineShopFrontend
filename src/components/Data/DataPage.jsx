@@ -57,20 +57,8 @@ const DataPage = () => {
     });
   };
 
-  const deleteProduct = (uuid, category, platform, pegi, title, price, weight, stock, description, isDigital, image) => {
-    ProductService.updateProducts(uuid, {
-      category,
-      platform,
-      pegi,
-      title,
-      price,
-      weight,
-      stock,
-      description,
-      isDigital,
-      image,
-      isDeleted: true
-    })
+  const deleteProduct = (uuid) => {
+    ProductService.deleteProducts(uuid)
     .then((response) => {
       showAlertMessage('Products successfully removed, reload the page to see the changes.', 'success');
     })
@@ -147,9 +135,9 @@ const DataPage = () => {
       pegi: products.pegi,
       productTitle: products.title,
       price: products.price,
-      weight: products.weight,
       stock: products.stock,
       description: products.description,
+      genres: products.genres.map(genre => genre).join(', '),
       digital: products.isDigital ? 'Yes' : 'No',
       deleted: products.isDeleted ? 'Yes' : 'No',
     }), 'products');
@@ -211,10 +199,10 @@ const DataPage = () => {
       { field: 'platform', headerName: 'Platform', width: 130 },
       { field: 'productTitle', headerName: 'Title', width: 200 },
       { field: 'price', headerName: 'Price', width: 90 },
-      { field: 'weight', headerName: 'Weight', width: 90 },
       { field: 'stock', headerName: 'Stock', width: 90 },
       { field: 'pegi', headerName: 'PEGI', width: 130 },
       { field: 'digital', headerName: 'Digital', width: 90 },
+      { field: 'genres', headerName: 'Genres', width: 150 },
       { field: 'description', headerName: 'Description', width: 200 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],

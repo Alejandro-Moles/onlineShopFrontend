@@ -4,6 +4,8 @@ import CountryService from '../services/countryService';
 import PostalCodeService from '../services/postalCodeService';
 import ShopUserService from '../services/shopUserService';
 import RoleService from '../services/roleService'
+import GenreService from '../services/genreService'
+
 export const fetchCategories = async () => {
   try {
     const response = await CategoriesService.getCategories();
@@ -80,6 +82,16 @@ export const fetchRoles = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching roles:', error);
+    return [];
+  }
+};
+
+export const fetchAvailableGenres = async () => {
+  try {
+    const response = await GenreService.getAvailableGenres();
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching genres:', error);
     return [];
   }
 };

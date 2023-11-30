@@ -41,7 +41,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
   const [formErrors, setFormErrors] = useState({});
 
   //REQUIREMENTS
-  const requiredFieldsProduct = ['category', 'platform', 'productTitle', 'price', 'weight', 'stock', 'pegi', 'digital', 'description'];
+  const requiredFieldsProduct = ['category', 'platform', 'productTitle', 'price', 'stock', 'pegi', 'digital', 'description', 'genres'];
   const requiredFieldsCategory = ['categoryType'];
   const requiredFieldsPlatform = ['platformType'];
   const requiredFieldsPayment = ['paymentType'];
@@ -145,6 +145,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
     }
     const genreData = {
       type: formData.genreType,
+      isDeleted: false,
     };
     try {
       const response = await GenreService.createGenre(genreData);
@@ -171,11 +172,11 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       platform: formData.platform,
       title: formData.productTitle,
       price: formData.price,
-      weight: formData.weight,
       stock: formData.stock,
       pegi: formData.pegi,
       isDigital: isDigital,
       description: formData.description,
+      genres: formData.genres,
       image: "image1",
       isDeleted: false,
     };

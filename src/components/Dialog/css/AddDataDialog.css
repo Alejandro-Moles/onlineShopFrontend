@@ -5,7 +5,12 @@
 }
 
 .AddDataform-field {
-    margin-bottom: 16px; /* Ajusta el valor según la cantidad de espacio que desees entre los campos. */
+    margin-bottom: 16px;
+}
+
+.AddDataform-field button {
+    margin-top: 16px;
+    height: 50px;
 }
   
 .AddDataDialogTitle{

@@ -6,6 +6,10 @@ const getGenres = () => {
     return axios.get(API_URL + "genres");
 };
 
+const getAvailableGenres = () => {
+    return axios.get(API_URL + "genres/availableGenres");
+};
+
 const updateGenre = (uuid, genreData) => {
     const url = `${API_URL}genres/${uuid}`;
     return axios.put(url, genreData);
@@ -19,7 +23,8 @@ const createGenre = (genreData) => {
 const GenreService = {
     getGenres,
     updateGenre,
-    createGenre
+    createGenre,
+    getAvailableGenres
 };
 
 export default GenreService;

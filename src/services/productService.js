@@ -15,8 +15,13 @@ const getProduct = (uuid) => {
 }
 
 const updateProducts = (uuid, productData) => {
-    const url = `${API_URL}products/${uuid}`;
+    const url = `${API_URL}products/updateProduct/${uuid}`;
     return axios.put(url, productData);
+}
+
+const deleteProducts = (uuid) => {
+    const url = `${API_URL}products/deleteProduct/${uuid}`;
+    return axios.put(url);
 }
 
 const createProduct = (productData) => {
@@ -65,7 +70,8 @@ const ProductService = {
     getTopProducts,
     updateProductStock,
     getAvaliableProducts,
-    getTopAvaliableProducts
+    getTopAvaliableProducts,
+    deleteProducts
 }; 
 
 
