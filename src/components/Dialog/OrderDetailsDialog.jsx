@@ -18,6 +18,8 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import OrderService from '../../services/orderService';
 import OrderProductService from '../../services/orderProductService';
+import ProductService from '../../services/productService';
+
 
 const CollapsibleTable = ({ order, orderDetails }) => {
     return (
@@ -84,6 +86,15 @@ const Row = ({ order, orderDetails }) => {
                       <TableCell sx={{ backgroundColor: '#f2f2f2', fontWeight: 'bold' }}>
                         Product Title
                       </TableCell>
+                      <TableCell sx={{ backgroundColor: '#f2f2f2', fontWeight: 'bold' }}>
+                        Category
+                      </TableCell>
+                      <TableCell sx={{ backgroundColor: '#f2f2f2', fontWeight: 'bold' }}>
+                        Platform
+                      </TableCell>
+                      <TableCell sx={{ backgroundColor: '#f2f2f2', fontWeight: 'bold' }}>
+                        Format
+                      </TableCell>
                       <TableCell sx={{ backgroundColor: '#f2f2f2', fontWeight: 'bold' }} align="right">
                         Quantity
                       </TableCell>
@@ -94,6 +105,9 @@ const Row = ({ order, orderDetails }) => {
                       orderDetails.map((detail) => (
                         <TableRow key={detail.uuid}>
                           <TableCell>{detail.productTitle}</TableCell>
+                          <TableCell>{detail.productCategory}</TableCell>
+                          <TableCell>{detail.productPlatform}</TableCell>
+                          <TableCell>{detail.productIsDigital ? 'Digital' : 'Physical'}</TableCell>
                           <TableCell align="right">{detail.quantity}</TableCell>
                         </TableRow>
                       ))}
@@ -111,6 +125,7 @@ const Row = ({ order, orderDetails }) => {
 const OrderDetailsDialog = ({ open, onClose, title, data }) => {
     const [orderData, setOrderData] = useState({ orders: [] });
     const [orderDetailData, setOrderDetailData] = useState({orders: []})
+    
 
     const fetchOrderData = async () => {
       try {
@@ -124,7 +139,25 @@ const OrderDetailsDialog = ({ open, onClose, title, data }) => {
     const fetchOrderDetailsData = async () => {
       try {
         const response = await OrderProductService.getOrderProductByOrder(data);
-        setOrderDetailData(response.data);
+        const orderDetailsWithProductData = await Promise.all(
+          response.data.map(async (detail) => {
+            try {
+              const product = await ProductService.getProduct(detail.productUUID);
+              return {
+                ...detail,
+                productTitle: product.data.title,
+                productCategory: product.data.category,
+                productPlatform: product.data.platform,
+                productIsDigital: product.data.isDigital,
+              };
+            } catch (error) {
+              console.error('Error fetching product details:', error);
+              return detail;
+            }
+          })
+        );
+  
+        setOrderDetailData(orderDetailsWithProductData);
       } catch (error) {
         console.error('Error fetching orders:', error);
       }

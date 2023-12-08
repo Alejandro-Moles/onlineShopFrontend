@@ -14,7 +14,7 @@ import OrderDetailsDialog from '../Dialog/OrderDetailsDialog';
 import OrderStatusService from '../../services/orderStatusService';
 import CustomAlert from '../AlertsMessage/CustomAlert';
 import ShopUserService from '../../services/shopUserService';
-
+import ForbiddenPage from '../ErrorPages/ForbiddenPage';
 const OrdersPage = () => {
     const [input, setInput] = useState("");
     const [orders, setOrders] = useState([]);

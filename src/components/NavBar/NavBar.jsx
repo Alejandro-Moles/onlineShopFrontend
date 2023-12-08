@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUserCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import GamepadIcon from '@mui/icons-material/Gamepad';
-import { Tooltip, Button, Menu, MenuItem } from '@mui/material';
+import { Badge , Tooltip, Button, Menu, MenuItem } from '@mui/material';
 import "./NavBar.css"
 import CartService from '../../services/cartService';
 import ShopUserService from '../../services/shopUserService';
@@ -14,6 +14,8 @@ import CustomAlert from '../AlertsMessage/CustomAlert';
 import LocationDialog from '../Dialog/LocationDialog';
 import UserAddressService from '../../services/userAddress';
 import MakeOrderDialog from '../Dialog/MakeOrderDialog';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../../scripts/Theme';
 
 export default function NavBar() {
     const [cartItems, setCartItems] = useState([]);
@@ -30,6 +32,12 @@ export default function NavBar() {
     const [alertSeverity, setAlertSeverity] = useState('info');
 
     const [selectedLocation, setSelectedLocation] = useState(null);
+
+    const [cartItemCount, setCartItemCount] = useState(CartLogic.getItemCartCount());
+
+    const handleCartUpdate = (event) => {
+        setCartItemCount(event.detail);
+    };
 
     const showAlert = (message, severity) => {
         setAlertMessage(message);
@@ -50,6 +58,11 @@ export default function NavBar() {
         }
         fetchCart();
         getCart();
+
+        CartLogic.addListener('CART_UPDATED', handleCartUpdate);
+        return () => {
+            CartLogic.quitListener('CART_UPDATED', handleCartUpdate);
+        };
     }, [])
 
     const handleOpenCartDialog = () => {
@@ -65,6 +78,8 @@ export default function NavBar() {
         try {
             const items = await CartLogic.createCart();
             setCartItems(items);
+            const itemCount = items.reduce((total, item) => total + item.quantity, 0);
+            CartLogic.updateCartItemCount(itemCount);
         } catch (error) {
             console.error('Error al obtener el carrito', error);
         }
@@ -160,133 +175,138 @@ export default function NavBar() {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-main fixed-top" id='my-navBar'>
-            <CustomAlert
-                message={alertMessage}
-                severity={alertSeverity}
-                open={isAlertOpen}
-                onClose={() => setIsAlertOpen(false)}
-                autoHideDuration={2000}
-            />
-            <Link className="logo" to={"/"}>
-                <GamepadIcon className="icon" fontSize="large"/>
-            </Link>
-            <button
-                className="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span className="navbar-toggler-icon"></span>
-            </button>
-
-            <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav mr-auto">
-                    <li className="nav-item active">
-                        <Link className="nav-link" to="/">
-                            Home <span className="sr-only">(current)</span>
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/searchProducts">
-                            Products
-                        </Link>
-                    </li>
-                </ul>
-            </div>
-
-            <div className="d-flex">
-                {user ? (
-                <div className='user_content'>
-                     {selectedLocation && (
-                        <div className='location'>
-                            <div className="locationInfo">
-                                {user.name + " ( " + selectedLocation.street+ " " + selectedLocation.postalCode + " ) "}
-                            </div>
-                        </div>
-                    )}
-                    <div className="location">
-                        <Tooltip title="Location" arrow>
-                            <Link className="btn btn-link" onClick={handleOpenLocationDialog}>
-                                <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" id='locationIcon'/>
-                            </Link>
-                        </Tooltip>
-                    </div>
-                     <div className="user_split_button">
-                        <Tooltip title={`Welcome ${user ? user.name : ''}`} arrow>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleMenuOpen}
-                            >
-                                <div className="avatarWithLetter">
-                                    {user.name.charAt(0).toUpperCase()}
-                                </div>
-                            </Button>
-                        </Tooltip>
-                        <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={handleMenuClose}
-                        >
-                            <MenuItem component={Link} to={`/profile/${user.uuid}`} onClick={handleMenuClose}>
-                                Go to Profile
-                            </MenuItem>
-                            <MenuItem onClick={handleLogout}>
-                                Logout
-                            </MenuItem>
-                        </Menu>
-                    </div>
-                </div>
-                ) : (
-                    <Tooltip title="User Account" arrow>
-                        <div className="user_png">
-                            <Link className="btn btn-link" to="/login">
-                                <FontAwesomeIcon icon={faUserCircle} size="lg" className="text-white" />
-                            </Link>
-                        </div>
-                    </Tooltip>
-                )}
-            </div>
-
-            <div className="cart">
-            <Tooltip title="Shopping Cart" arrow>
-                <Link className="btn btn-link" onClick={handleOpenCartDialog}>
-                    <FontAwesomeIcon icon={faShoppingCart} size="lg" id='cartIcon'/>
+        <ThemeProvider theme={theme}>
+            <nav className="navbar navbar-expand-lg navbar-dark bg-main fixed-top overflow-hidden-no-scroll" id='my-navBar'>
+                <CustomAlert
+                    message={alertMessage}
+                    severity={alertSeverity}
+                    open={isAlertOpen}
+                    onClose={() => setIsAlertOpen(false)}
+                    autoHideDuration={2000}
+                />
+                <Link className="logo" to={"/"}>
+                    <GamepadIcon className="icon" fontSize="large"/>
                 </Link>
-            </Tooltip>
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
 
-            <CartDialog
-                open={isCartDialogOpen}
-                onClose={handleCloseCartDialog}
-                onPurchase={handlePurchase}
-                cartItems={cartItems}
-                onRemoveItem={handleRemoveItem}
-                updateCartItems={updateCartItems}
-                loggeduser={user}
-                location={selectedLocation}
-            />
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav mr-auto">
+                        <li className="nav-item active">
+                            <Link className="nav-link" to="/">
+                                Home <span className="sr-only">(current)</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/searchProducts">
+                                Products
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
 
-            <LocationDialog
-                open={isLocationDialogOpen}
-                onClose={handleCloseLocationDialog}
-                userAddress={userAddresses}
-                user={user}
-                onSelect={handleLocationSelect}
-            />
+                <div className="d-flex">
+                    {user ? (
+                    <div className='user_content'>
+                        {selectedLocation && (
+                            <div className='location'>
+                                <div className="locationInfo">
+                                    {user.name + " ( " + selectedLocation.street+ " " + selectedLocation.postalCode + " ) "}
+                                </div>
+                            </div>
+                        )}
+                        <div className="location">
+                            <Tooltip title="Location" arrow>
+                                <Link className="btn btn-link" onClick={handleOpenLocationDialog}>
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" id='locationIcon'/>
+                                </Link>
+                            </Tooltip>
+                        </div>
+                        <div className="user_split_button">
+                            <Tooltip title={`Welcome ${user ? user.name : ''}`} arrow>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleMenuOpen}
+                                    style={{ borderRadius: '20%', width: '40px !important', height: '40px !important' }}
+                                >
+                                    <div className="avatarWithLetter">
+                                        {user.name.charAt(0).toUpperCase()}
+                                    </div>
+                                </Button>
+                            </Tooltip>
+                            <Menu
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={handleMenuClose}
+                            >
+                                <MenuItem component={Link} to={`/profile/${user.uuid}`} onClick={handleMenuClose}>
+                                    Go to Profile
+                                </MenuItem>
+                                <MenuItem onClick={handleLogout}>
+                                    Logout
+                                </MenuItem>
+                            </Menu>
+                        </div>
+                    </div>
+                    ) : (
+                        <Tooltip title="User Account" arrow>
+                            <div className="user_png">
+                                <Link className="btn btn-link" to="/login">
+                                    <FontAwesomeIcon icon={faUserCircle} size="lg" className="text-white" />
+                                </Link>
+                            </div>
+                        </Tooltip>
+                    )}
+                </div>
 
-            <MakeOrderDialog
-                open={isMakeOrderDialogOpen}
-                handleClose={handleCloseOrderDialog}
-                user={user}
-                address={selectedLocation}
-                cartItems={cartItems}
-                clearCart={removeMultipleItems}
-            />
-            </div>
-        </nav>
+                <div className="cart">
+                <Tooltip title="Shopping Cart" arrow>
+                        <Badge badgeContent={cartItemCount} color="secondary" className="cart-badge">
+                            <Link className="btn btn-link" onClick={handleOpenCartDialog}>
+                                <FontAwesomeIcon icon={faShoppingCart} size="lg" id='cartIcon'/>
+                            </Link>
+                        </Badge>
+                </Tooltip>
+
+                <CartDialog
+                    open={isCartDialogOpen}
+                    onClose={handleCloseCartDialog}
+                    onPurchase={handlePurchase}
+                    cartItems={cartItems}
+                    onRemoveItem={handleRemoveItem}
+                    updateCartItems={updateCartItems}
+                    loggeduser={user}
+                    location={selectedLocation}
+                />
+
+                <LocationDialog
+                    open={isLocationDialogOpen}
+                    onClose={handleCloseLocationDialog}
+                    userAddress={userAddresses}
+                    user={user}
+                    onSelect={handleLocationSelect}
+                />
+
+                <MakeOrderDialog
+                    open={isMakeOrderDialogOpen}
+                    handleClose={handleCloseOrderDialog}
+                    user={user}
+                    address={selectedLocation}
+                    cartItems={cartItems}
+                    clearCart={removeMultipleItems}
+                />
+                </div>
+            </nav>
+        </ThemeProvider>
     );
 }

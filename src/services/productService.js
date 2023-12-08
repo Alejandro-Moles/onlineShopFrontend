@@ -1,4 +1,5 @@
 import axios from "axios";
+import ProductForm from "../components/Dialog/Forms/ProductsForm";
 
 const API_URL = "http://localhost:8080/";
 
@@ -19,20 +20,30 @@ const updateProducts = (uuid, productData) => {
     return axios.put(url, productData);
 }
 
+const updateProductsStock = (uuid, productData) => {
+    const url = `${API_URL}products/updateProductStock/${uuid}`;
+    return axios.put(url, productData);
+}
+
 const deleteProducts = (uuid) => {
     const url = `${API_URL}products/deleteProduct/${uuid}`;
     return axios.put(url);
 }
 
 const createProduct = (productData) => {
-    const url = `${API_URL}products`;
-    return axios.post(url, productData);
+    try{
+        const url = `${API_URL}products`;
+        console.log(productData)
+        return axios.post(url, productData);
+    }catch(error){
+        console.log(error)
+    }
 };
 
 const getTopProducts = () => {
     return axios.get(API_URL + "products/topProducts");
 };
-
+ 
 const getTopAvaliableProducts = () => {
     return axios.get(API_URL + "products/availableTopProducts");
 };
@@ -41,7 +52,8 @@ const updateProductStock = async (productUuid, quantity, isAddingStock) => {
     try {
         const product = await getProduct(productUuid);
         const newStock = isAddingStock ? product.data.stock + quantity : product.data.stock - quantity;
-        await updateProducts(productUuid, { 
+
+        await updateProductsStock(productUuid, { 
             category: product.data.category,
             platform: product.data.platform,
             title: product.data.title,
@@ -53,7 +65,8 @@ const updateProductStock = async (productUuid, quantity, isAddingStock) => {
             description: product.data.description,
             image: product.data.image,
             isDeleted: product.data.isDeleted,
-        });
+            genres: product.data.genres
+        })
 
         return true;
     } catch (error) {

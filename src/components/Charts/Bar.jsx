@@ -21,19 +21,34 @@ ChartJS.register(
     Filler
 );
 import React from 'react';
-const Bars = ({ labels, data, options }) => {
+const Bars = ({ title, labels, data, options }) => {
   const midata = {
-    labels: labels,
+    labels: title,
     datasets: [
       {
         label: 'Sold',
         data: data,
-        backgroundColor: 'rgba(0, 220, 195, 0.5)',
+        backgroundColor: 'rgb(236, 107, 34)',
       },
     ],
   };
 
-  return <Bar data={midata} options={options} />;
+  const updatedOptions = {
+    ...options,
+    plugins: {
+      ...options.plugins,
+      tooltip: {
+        callbacks: {
+          title: function (tooltipItems) {
+            const index = tooltipItems[0]?.dataIndex;
+            return index !== undefined ? labels[index] : '';
+          },
+        },
+      },
+    },
+  };
+
+  return <Bar data={midata} options={updatedOptions} />;
 };
 
 export default Bars;

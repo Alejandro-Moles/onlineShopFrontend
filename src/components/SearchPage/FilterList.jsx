@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import './css/FilterList.css';
 import { fetchAvailableCategories, fetchAvailablePlatforms, fetchAvailableGenres } from '../../scripts/loadData';
 import { Checkbox, List, ListItem, ListItemText, FormControlLabel, Paper  } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../../scripts/Theme'; 
+
 
 
 export const FilterList = ({ onFilterChange }) => {
@@ -64,72 +67,72 @@ export const FilterList = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="filterList">
-      <div className="select-container">
-        <label className="select-label">Category</label>
-        <select className="select" onChange={handleSelectChangeCategory}>
-          <option value="">All</option>
-          {categories.map((category) => (
-            <option key={category.uuid} value={category.type}>
-              {category.type}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="select-container">
-        <label className="select-label">Platform</label>
-        <select className="select" onChange={handleSelectChangePlatform}>
-          <option value="">All</option>
-          {platforms.map((platform) => (
-            <option key={platform.uuid} value={platform.type}>
-              {platform.type}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="select-container">
-        <label className="select-label">PEGI</label>
-        <select className="select" onChange={handleSelectChangePEGI}>
-          <option value="">All</option>
-          <option value="3">PEGI 3</option>
-          <option value="7">PEGI 7</option>
-          <option value="12">PEGI 12</option>
-          <option value="16">PEGI 16</option>
-          <option value="18">PEGI 18</option>
-        </select>
-      </div>
-
-      <div className="select-container">
-        <label className="select-label">Max Price</label>
-        <input
-          type="number"
-          className="select"
-          value={maxPrice}
-          onChange={handleMaxPriceChange}
-          min="0"
-        />
-      </div>
-
-      
-      <div className="select-container">
-        <label className="select-label">Genres</label>
-        <Paper className="genres-container" elevation={3}>
-          <List>
-            {genres.map((genre) => (
-                <ListItem key={genre.uuid}>
-                  <FormControlLabel
-                    control={<Checkbox checked={selectedGenres.includes(genre)} onChange={() => handleCheckboxChange(genre)} />}
-                    label={<ListItemText primary={genre.type} />}
-                />
-                </ListItem>
+    <ThemeProvider theme={theme}>
+      <div className="filterList">
+        <div className="select-container">
+          <label className="select-label">Category</label>
+          <select className="select" onChange={handleSelectChangeCategory}>
+            <option value="">All</option>
+            {categories.map((category) => (
+              <option key={category.uuid} value={category.type}>
+                {category.type}
+              </option>
             ))}
-          </List>   
-        </Paper>
+          </select>
+        </div>
+
+        <div className="select-container">
+          <label className="select-label">Platform</label>
+          <select className="select" onChange={handleSelectChangePlatform}>
+            <option value="">All</option>
+            {platforms.map((platform) => (
+              <option key={platform.uuid} value={platform.type}>
+                {platform.type}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="select-container">
+          <label className="select-label">PEGI</label>
+          <select className="select" onChange={handleSelectChangePEGI}>
+            <option value="">All</option>
+            <option value="3">PEGI 3</option>
+            <option value="7">PEGI 7</option>
+            <option value="12">PEGI 12</option>
+            <option value="16">PEGI 16</option>
+            <option value="18">PEGI 18</option>
+          </select>
+        </div>
+
+        <div className="select-container">
+          <label className="select-label">Max Price</label>
+          <input
+            type="number"
+            className="select"
+            value={maxPrice}
+            onChange={handleMaxPriceChange}
+            min="0"
+          />
+        </div>
+
+        <div className="select-container">
+          <label className="select-label">Genres</label>
+          <Paper className="genres-container" elevation={3}>
+            <List>
+              {genres.map((genre) => (
+                  <ListItem key={genre.uuid}>
+                    <FormControlLabel
+                      control={<Checkbox checked={selectedGenres.includes(genre)} onChange={() => handleCheckboxChange(genre)} />}
+                      label={<ListItemText primary={genre.type} />}
+                  />
+                  </ListItem>
+              ))}
+            </List>   
+          </Paper>
+        </div>
+
       </div>
-
-    </div>
-
+    </ThemeProvider>
   );
 };

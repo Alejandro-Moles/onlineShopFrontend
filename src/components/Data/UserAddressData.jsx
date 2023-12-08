@@ -6,6 +6,8 @@ import ShopUserService from '../../services/shopUserService';
 import CustomAlert from '../AlertsMessage/CustomAlert';
 import UserAddressService from '../../services/userAddress'
 import { fetchAvailablePostalCode } from '../../scripts/loadData';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../../scripts/Theme'; 
 
 const UserAddressData = () => {
     const { uuid } = useParams();
@@ -115,29 +117,31 @@ const UserAddressData = () => {
     );
 
     return (
-        <div className='formContainer'>
-            <CustomAlert
-                message={alertMessage}
-                severity={alertSeverity}
-                open={isAlertOpen}
-                onClose={() => setIsAlertOpen(false)}
-                autoHideDuration={2000}
-            />
-            <form className='form' onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                {createTextField('User Mail', user.mail, undefined, true)}
-                {createTextField('Apartment', formData.apartament, handleChange('apartament'))}
-                {createTextField('Home', formData.home, handleChange('home'))}
-                {createTextField('Street', formData.street, handleChange('street'))}
-                {renderSelect(postalCode)}
-                <Grid item xs={12}>
-                    <Button type="submit" variant="contained" color="primary">
-                        Submit
-                    </Button>
-                </Grid>
-                </Grid>
-            </form>
-        </div>
+        <ThemeProvider theme={theme}>
+            <div className='formContainer'>
+                <CustomAlert
+                    message={alertMessage}
+                    severity={alertSeverity}
+                    open={isAlertOpen}
+                    onClose={() => setIsAlertOpen(false)}
+                    autoHideDuration={2000}
+                />
+                <form className='form' onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                    {createTextField('User Mail', user.mail, undefined, true)}
+                    {createTextField('Apartment', formData.apartament, handleChange('apartament'))}
+                    {createTextField('Home', formData.home, handleChange('home'))}
+                    {createTextField('Street', formData.street, handleChange('street'))}
+                    {renderSelect(postalCode)}
+                    <Grid item xs={12}>
+                        <Button type="submit" variant="contained" color="primary" fullWidth>
+                            Submit
+                        </Button>
+                    </Grid>
+                    </Grid>
+                </form>
+            </div>
+        </ThemeProvider>
     );
 };
 

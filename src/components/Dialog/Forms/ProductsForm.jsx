@@ -11,7 +11,8 @@ import {
   List, 
   ListItem, 
   ListItemText, 
-  Checkbox
+  Checkbox,
+  Input 
 } from '@mui/material';
 import { fetchAvailableCategories, fetchAvailablePlatforms, fetchAvailableGenres } from '../../../scripts/loadData';
 import CustomSelect from '../CustomSelect';
@@ -62,7 +63,6 @@ function ProductForm({ formData, handleChange, updateData }) {
   };
 
   const handleAcceptGenres = () => {
-    console.log("Géneros seleccionados:", selectedGenres);
     handleChange("genres", selectedGenres, "genres");
     setDialogOpen(false);
   };

@@ -1,7 +1,36 @@
 import CartService from '../services/cartService';
 import ProductService from '../services/productService';
-import { OutOfStockError } from './Errors/error'
+import { OutOfStockError } from './Errors/error';
+
 let itemCount = 0;
+const eventListeners = {};
+
+function addListener(eventName, listener) {
+    if (!eventListeners[eventName]) {
+        eventListeners[eventName] = [];
+    }
+    eventListeners[eventName].push(listener);
+}
+
+function quitListener(eventName, listener) {
+    if (eventListeners[eventName]) {
+        eventListeners[eventName] = eventListeners[eventName].filter(
+            (existingListener) => existingListener !== listener
+        );
+    }
+}
+
+function publish(eventName, data) {
+    if (eventListeners[eventName]) {
+        eventListeners[eventName].forEach((listener) => {
+            listener({ detail: data });
+        });
+    }
+}
+
+function notifyListeners() {
+    publish('CART_UPDATED', getItemCartCount());
+}
 
 const addToCart = async (uuid) => {
     try {
@@ -12,6 +41,7 @@ const addToCart = async (uuid) => {
             if (!isSuccess) {
                 throw new Error("Failed to update stock");
             }
+            notifyListeners();
         } else {
             throw new OutOfStockError("Product out of stock. Cannot add to cart.");
         }
@@ -50,11 +80,17 @@ const clearCart = () => {
 
 const addToCartCount = () => {
     itemCount += 1;
+    notifyListeners();
 };
 
-const getItemCartCount = () =>{
+const restToCartCount = (quantity) => {
+    itemCount -= quantity;
+    notifyListeners();
+};
+
+const getItemCartCount = () => {
     return itemCount;
-}
+};
 
 const updateProductStock = async (productUuid, quantity, isAdding) => {
     try {
@@ -65,6 +101,11 @@ const updateProductStock = async (productUuid, quantity, isAdding) => {
         throw error;
     }
 };
+ 
+const updateCartItemCount = (quantity) => {
+    itemCount = quantity;
+    notifyListeners();
+};
 
 const CartLogic = {
     addToCart,
@@ -73,7 +114,11 @@ const CartLogic = {
     addToCartCount,
     getItemCartCount,
     clearCart,
-    updateProductStock
+    updateProductStock,
+    addListener,
+    quitListener,
+    restToCartCount,
+    updateCartItemCount
 };
 
 export default CartLogic;

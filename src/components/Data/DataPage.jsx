@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, Paper } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import "./css/DataPage.css"
-import theme from '../../scripts/Theme';
+import theme from '../../scripts/Theme'; 
 import TableComponent from './TableComponent';
 import CategoriesService from '../../services/categoriesService';
 import PlatformsService from '../../services/platformsService';
@@ -12,6 +12,7 @@ import PaymentService from '../../services/paymentService';
 import GenreService from '../../services/genreService';
 import AlertMessage from '../AlertsMessage/AlertMessage';
 import ShopUserService from '../../services/shopUserService';
+import ForbiddenPage from '../ErrorPages/ForbiddenPage';
 
 const DataPage = () => { 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -168,10 +169,12 @@ const DataPage = () => {
         ShopUserService.getActualShopUser(token)
             .then(response => {
                 setIsEmployee(response.data.roles.includes('EMPLOYEE'));
+                console.log(response.data);
             })
             .catch(error => {
                 console.error('Error al cargar al usuario');
             })
+            
     }
   }, []);
 

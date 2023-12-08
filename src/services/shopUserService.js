@@ -43,6 +43,13 @@ const updateShopUserRoles = (uuid, listRoles) => {
     return axios.put(url, listRoles);
 }
 
+const updateData = (uuid, shopUserData) => {
+    console.log(uuid)
+    console.log(shopUserData)
+    const url = `${API_URL}shopUsers/profileData/${uuid}`;
+    return axios.put(url, shopUserData);
+}
+
 const ShopUserService = {
     getShopUsers,
     updateShopUser,
@@ -50,7 +57,8 @@ const ShopUserService = {
     getActualShopUser,
     updatePassword,
     getShopUserStatistic,
-    updateShopUserRoles
+    updateShopUserRoles,
+    updateData
 };
 
 

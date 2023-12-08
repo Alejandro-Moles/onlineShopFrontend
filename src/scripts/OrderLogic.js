@@ -15,7 +15,7 @@ const getOrderAndPaymentStatus = (selectedPayment) => {
   
     return { paymentStatus, orderStatus };
 };
-
+ 
 const placeOrder = async (address, user, selectedDelivery, selectedPayment, cartItems) => {
     try {
         const { paymentStatus, orderStatus } = getOrderAndPaymentStatus(selectedPayment);
@@ -49,7 +49,7 @@ const processOrderItems = async (cartItems, orderUuid) => {
     for (const item of cartItems) {
         const orderProductData = {
             orderUUID: orderUuid,
-            productTitle: item.title,
+            productUUID: item.productUuid,
             quantity: item.quantity,
             isDeleted: false
         };

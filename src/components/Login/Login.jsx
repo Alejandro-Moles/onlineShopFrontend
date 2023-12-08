@@ -66,7 +66,7 @@ function Login() {
       />
       <div className="form_container">
         <form onSubmit={handleSubmit}>
-            <h3 className="text-center">Sign Up</h3>
+            <h3 className="text-center">Sign In</h3>
 
             <div className="my-input">
                 <label htmlFor="email">Email</label>

@@ -19,7 +19,7 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    Filler
+    Filler 
 );
 
 export default function LinesChart({ labels, data }) {
@@ -31,11 +31,11 @@ export default function LinesChart({ labels, data }) {
                 data: data,
                 tension: 0.5,
                 fill: true,
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgb(236, 107, 34)',
+                backgroundColor: 'rgb(236, 107, 34, 0.5)',
                 pointRadius: 5,
-                pointBorderColor: 'rgba(255, 99, 132)',
-                pointBackgroundColor: 'rgba(255, 99, 132)',
+                pointBorderColor: 'rgb(236, 107, 34)',
+                pointBackgroundColor: 'rgb(236, 107, 34)',
             },
         ],
     };
@@ -44,9 +44,15 @@ export default function LinesChart({ labels, data }) {
         scales: {
             y: {
                 min: 0,
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.2)', // Color de las líneas horizontales
+                },
             },
             x: {
-                ticks: { color: 'rgb(255, 99, 132)' },
+                ticks: { color: 'rgb(255, 255, 255)' },
+                grid: {
+                    color: 'transparent', // Puedes cambiar esto si deseas líneas verticales en un color diferente
+                },
             },
         },
     };

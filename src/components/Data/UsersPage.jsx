@@ -6,6 +6,7 @@ import theme from '../../scripts/Theme';
 import { Fab, Dialog, DialogTitle, DialogContent, DialogActions, Button, List, ListItem, ListItemText, Checkbox } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ShopUserService from '../../services/shopUserService';
+import ForbiddenPage from '../ErrorPages/ForbiddenPage';
 
 const UserPage = () => {
   const [users, setUsers] = useState([]); 

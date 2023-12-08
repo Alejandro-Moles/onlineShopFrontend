@@ -12,7 +12,7 @@ const createCart = () => {
             console.error('Error al obtener el carrito', error);
             throw error;
         });
-};
+}; 
 
 const getCart = () => {
     return axios.get(API_URL + "getCart", { withCredentials: true })

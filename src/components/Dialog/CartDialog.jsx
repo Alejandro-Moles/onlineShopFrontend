@@ -14,8 +14,10 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import CustomAlert from '../AlertsMessage/CustomAlert';
 import './css/CartDialog.css';
+import theme from '../../scripts/Theme';
 import CartLogic from '../../scripts/CartLogic';
-
+import { ThemeProvider } from '@mui/material/styles';
+ 
 const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, updateCartItems, loggeduser, location }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [quantityToDelete, setQuantityToDelete] = useState(1);
@@ -34,6 +36,7 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
       setSelectedItem(item);
     } else {
       onRemoveItem(item.productUuid);
+      notifyCartUpdated(1);
     }
   };
 
@@ -42,16 +45,16 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
       const updatedQuantity = selectedItem.quantity - quantityToDelete;
       const newQuantity = Math.max(updatedQuantity, 0);
       const updatedItem = { ...selectedItem, quantity: newQuantity };
-
-      if (updatedItem.quantity <= 0) {
-        onRemoveItem(updatedItem.productUuid);
-        handleCancelDelete();
-      } else {
+      notifyCartUpdated(quantityToDelete);
+      
+        if (updatedItem.quantity <= 0) {
+          onRemoveItem(updatedItem.productUuid);
+          handleCancelDelete();
+        } else {
         const updatedCart = cartItems.map((item) =>
           item.productUuid === updatedItem.productUuid ? updatedItem : item
         );
         updateCartItems(updatedCart);
-        console.log(quantityToDelete)
         try {
           await CartLogic.updateProductStock(
             updatedItem.productUuid,
@@ -90,67 +93,73 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
     setIsAlertOpen(true);
   };
 
+  const notifyCartUpdated = (quantity) => {
+    CartLogic.restToCartCount(quantity);
+  };
+
   return (
-    <Dialog open={open} onClose={onClose}>
-      <CustomAlert
-        message={alertMessage}
-        severity={alertSeverity}
-        open={isAlertOpen}
-        onClose={() => setIsAlertOpen(false)}
-        autoHideDuration={2000}
-      />
-  
-      <DialogTitle>Your Shopping Cart</DialogTitle>
-      <DialogContent>
-        {cartItems.length > 0 ? (
-          <List>
-            {cartItems.map((item) => (
-              <ListItem
-                key={item.productUuid}
-                className={selectedItem?.productUuid === item.productUuid ? 'deleting' : ''}
-              >
-                <ListItemText primary={item.title} secondary={`Quantity: ${item.quantity}`} />
-                <IconButton onClick={(e) => { e.stopPropagation(); handleRemoveItemClick(item); }}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <p>Your cart is empty.</p>
-        )}
-      </DialogContent>
-  
-      {isPurchaseButtonActive && (
-        <DialogActions style={{ justifyContent: 'center' }}>
-          <Button onClick={handlePurchase} color="primary">
-            Purchase
-          </Button>
-        </DialogActions>
-      )}
-  
-      <Dialog open={!!selectedItem} onClose={handleCancelDelete}>
-        <DialogTitle>{`How many ${selectedItem?.title} do you want to delete?`}</DialogTitle>
+    <ThemeProvider theme={theme}>
+      <Dialog open={open} onClose={onClose}>
+        <CustomAlert
+          message={alertMessage}
+          severity={alertSeverity}
+          open={isAlertOpen}
+          onClose={() => setIsAlertOpen(false)}
+          autoHideDuration={2000}
+        />
+    
+        <DialogTitle>Your Shopping Cart</DialogTitle>
         <DialogContent>
-          <TextField
-            type="number"
-            label="Quantity"
-            value={quantityToDelete}
-            onChange={(e) => setQuantityToDelete(parseInt(e.target.value, 10) || 1)}
-            inputProps={{ min: 1, max: selectedItem?.quantity || 1 }}
-            fullWidth  
-          />
+          {cartItems.length > 0 ? (
+            <List>
+              {cartItems.map((item) => (
+                <ListItem
+                  key={item.productUuid}
+                  className={selectedItem?.productUuid === item.productUuid ? 'deleting' : ''}
+                >
+                  <ListItemText primary={item.title} secondary={`Quantity: ${item.quantity}`} />
+                  <IconButton onClick={(e) => { e.stopPropagation(); handleRemoveItemClick(item); }}>
+                    <DeleteIcon color="error"/>
+                  </IconButton>
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <p>Your cart is empty.</p>
+          )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteConfirmation} color="primary">
-            Delete
-          </Button>
-        </DialogActions>
+    
+        {isPurchaseButtonActive && (
+          <DialogActions style={{ justifyContent: 'center' }}>
+            <Button onClick={handlePurchase} color="primary">
+              Purchase
+            </Button>
+          </DialogActions>
+        )}
+    
+        <Dialog open={!!selectedItem} onClose={handleCancelDelete}>
+          <DialogTitle>{`How many ${selectedItem?.title} do you want to delete?`}</DialogTitle>
+          <DialogContent>
+            <TextField
+              type="number"
+              label="Quantity"
+              value={quantityToDelete}
+              onChange={(e) => setQuantityToDelete(parseInt(e.target.value, 10) || 1)}
+              inputProps={{ min: 1, max: selectedItem?.quantity || 1 }}
+              fullWidth  
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleDeleteConfirmation} color="primary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Dialog>
-    </Dialog>
+    </ThemeProvider>
   );
 };
 

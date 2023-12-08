@@ -16,24 +16,30 @@ import OrdersPage from './components/Data/OrdersPage.jsx';
 import ViewOrder from './components/Login/ViewOrder.jsx';
 import StatisticsComponent from './components/Data/StadisticPage.jsx';
 import UserPage from './components/Data/UsersPage.jsx';
+import NotFound from './components/ErrorPages/NotFound.jsx';
+import AppProtectedRoutes from './AppProtectedRoutes.jsx';
 
 function App() {
   return (
       <Routers>
           <NavBar/>
           <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/login" element={<Login/>} />
-            <Route path="/signup" element={<Signup/>} />
-            <Route path="/searchProducts" element={<SearchPage/>} />
-            <Route path="/article/:uuid" element={<Article/>}/>
-            <Route path='/dataPage' element={<DataPage/>}/>
-            <Route path='/profile/:uuid' element={<UserProfile/>}/>
-            <Route path='/userAddressData/:uuid' element={<UserAddressData/>}/>
-            <Route path='/ordersPage' element={<OrdersPage/>}/>
-            <Route path="/viewOrders/:uuid" element={<ViewOrder/>}/>
-            <Route path="/stadisticPage" element={<StatisticsComponent/>}/>
-            <Route path="/userTablePage" element={<UserPage/>}/>
+            <Route exact path="/" element={<Home/>} />
+            <Route exact path="/login" element={<Login/>} />
+            <Route exact path="/signup" element={<Signup/>} />
+            <Route exact path="/searchProducts" element={<SearchPage/>} />
+            <Route exact path="/article/:uuid" element={<Article/>}/>
+            <Route exact path="*" element={<NotFound />} />
+            
+            <Route element={<AppProtectedRoutes/>}>
+              <Route exact path='/dataPage' element={<DataPage/>}/>
+              <Route exact path='/profile/:uuid' element={<UserProfile/>}/>
+              <Route exact path='/userAddressData/:uuid' element={<UserAddressData/>}/>
+              <Route exact path='/ordersPage' element={<OrdersPage/>}/>
+              <Route exact path="/viewOrders/:uuid" element={<ViewOrder/>}/>
+              <Route exact path="/stadisticPage" element={<StatisticsComponent/>}/>
+              <Route exact path="/userTablePage" element={<UserPage/>}/>
+            </Route> 
           </Routes>   
           <SpeedDialComponent/>
       </Routers>

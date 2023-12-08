@@ -39,7 +39,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
   const [openDialog, setOpenDialog] = useState(false);
   const [formData, setFormData] = useState({});
   const [formErrors, setFormErrors] = useState({});
-
+ 
   //REQUIREMENTS
   const requiredFieldsProduct = ['category', 'platform', 'productTitle', 'price', 'stock', 'pegi', 'digital', 'description', 'genres'];
   const requiredFieldsCategory = ['categoryType'];
@@ -77,7 +77,8 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       handleClose();
       window.location.reload();
     } catch (error) {
-      showAlert('An error occurred while adding the category ' + error, 'error');
+      console.log(error.response.data);
+      showAlert(error.response.data, 'error');
     }
   }
 
@@ -95,7 +96,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       handleClose();
       window.location.reload();
     } catch (error) {
-      showAlert('An error occurred while adding the platform ' + error, 'error');
+      showAlert(error.response.data, 'error');
     }
   }
 
@@ -110,11 +111,10 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
     };
     try {
       const response = await PaymentService.createPayment(paymentData);
-      console.log('Payment added successfully:', response.data);
       handleClose();
       window.location.reload();
     } catch (error) {
-      showAlert('An error occurred while adding the payment ' + error, 'error');
+      showAlert(error.response.data, 'error');
     }
   }
 
@@ -133,7 +133,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       handleClose();
       window.location.reload();
     } catch (error) {
-      showAlert('An error occurred while adding the delivery ' + error, 'error');
+      showAlert(error.response.data, 'error');
     }
   }
 
@@ -153,7 +153,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       handleClose();
       window.location.reload();
     } catch (error) {
-      showAlert('An error occurred while adding the genre ' + error, 'error');
+      showAlert(error.response.data, 'error');
     }
   }
 
@@ -186,7 +186,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       handleClose();
       window.location.reload();
     } catch (error) {
-      showAlert('An error occurred while adding the product ' + error, 'error');
+      showAlert(error.response.data, 'error');
     }
   }
 

@@ -102,7 +102,8 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
         window.location.reload();
       })
       .catch((error) => {
-        showAlert('There has been an error when updating the category', 'error');
+        console.log(error)
+        showAlert(error.response.data, 'error');
       });
   };
 
@@ -120,7 +121,7 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
         window.location.reload();
       })
       .catch((error) => {
-        showAlert('There has been an error when updating the platform', 'error');
+        showAlert(error.response.data, 'error');
       });
   };
 
@@ -138,7 +139,7 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
         window.location.reload();
       })
       .catch((error) => {
-        showAlert('There has been an error when updating the payment', 'error');
+        showAlert(error.response.data, 'error');
       });
   };
 
@@ -156,7 +157,7 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
         window.location.reload();
       })
       .catch((error) => {
-        showAlert('There has been an error when updating the delivery', error);
+        showAlert(error.response.data, 'error');
       });
   };
 
@@ -174,7 +175,7 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
         window.location.reload();
       })
       .catch((error) => {
-        showAlert('There has been an error when updating the genre', 'error');
+        showAlert(error.response.data, 'error');
       });
   };
 
@@ -214,7 +215,7 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
         window.location.reload();
       })
       .catch((error) => {
-        showAlert('There has been an error when updating the product', 'error');
+        showAlert(error.response.data, 'error');
       });
   };
 
