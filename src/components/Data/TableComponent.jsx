@@ -88,6 +88,7 @@ function TableComponent({ columns, data, deleteDataBaseHandler, type}) {
     setIsUpdating(true);
     const selectedData = selectionModel.map((id) => data.find((row) => row.id === id));
     setDialogUpdateData(selectedData);
+    console.log(selectedData);
     for (const item of data) {
       if(item.categoryType){
         setTableType("category");

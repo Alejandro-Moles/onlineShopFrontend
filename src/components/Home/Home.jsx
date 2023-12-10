@@ -7,6 +7,7 @@ import Title from '../Titles/Title';
 
 function Home() {
     const [products, setProducts] = useState([]);
+    const [cheapestProduct, setCheapestProduct] = useState([])
 
     useEffect(() => {
       const fetchProducts = async () => {
@@ -17,13 +18,23 @@ function Home() {
           console.error('Error fetching products:', error);
         }
       };
+      const fetchCheapestProducts = async () => {
+        try {
+          const response = await ProductService.getCheapestProducts();
+          setCheapestProduct(response.data); 
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        }
+      };
       fetchProducts();
+      fetchCheapestProducts();
     }, []);
 
     return (
         <div className="App"> 
-            <CarouselComponent  slides={products}/>
-            <Title></Title>
+            <Title title={"Cheapest Products"}/>
+            <CarouselComponent  slides={cheapestProduct}/>
+            <Title title={"Top Sale"}/>
             <ProductList products={products}/>
         </div>
     );

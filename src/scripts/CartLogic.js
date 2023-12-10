@@ -32,7 +32,7 @@ function notifyListeners() {
     publish('CART_UPDATED', getItemCartCount());
 }
 
-const addToCart = async (uuid) => {
+const addToCart = async (uuid) => { 
     try {
         const product = await ProductService.getProduct(uuid);
         if (product.data.stock > 0) {

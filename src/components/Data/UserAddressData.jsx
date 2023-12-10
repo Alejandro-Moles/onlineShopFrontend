@@ -76,9 +76,12 @@ const UserAddressData = () => {
             window.location.href = '/';
         } catch (error){
             console.error('Error', error)
-            showAlert("An error occurred while creating the address", "error")
+            if(error.response.data){
+                showAlert(error.response.data, "error")
+            }else{
+                showAlert("An error occurred while creating the address", "error")
+            } 
         }
-        
     };
 
     const renderSelect = (options) => (

@@ -39,12 +39,19 @@ function Login() {
         mail: emailValue,
         password: passwordValue,
     }).then((response) => {
-        showAlert('Successful user login' + response, 'info');
+        showAlert('Successful user login', 'success');
         const token = response.data.accessToken;
         localStorage.setItem('token', token);
         window.location.href = '/';
     }).catch((error) => {
-        showAlert('There has been an error in the login' + error, 'error');
+      console.log(error.response.data)
+      if(error.response.data.error){
+        if(error.response.data.error = "Unauthorized"){
+          showAlert('The password is not correct','error');
+        }
+      }else{
+        showAlert(error.response.data, 'error');
+      }
     });
 
   };

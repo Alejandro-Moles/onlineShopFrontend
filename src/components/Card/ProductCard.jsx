@@ -4,14 +4,10 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Typography,
+  Typography, 
   CardActions,
-  IconButton,
-  Tooltip,
   Button,
 } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import InfoIcon from '@mui/icons-material/Info';
 import CustomAlert from '../AlertsMessage/CustomAlert';
 import { OutOfStockError } from '../../scripts/Errors/error';
 import CartLogic from '../../scripts/CartLogic';
@@ -24,7 +20,7 @@ function ProductCard({ props }) {
  
   const addToCart = async () => {
     try {
-      await CartLogic.addToCart(props.uuid);
+      await CartLogic.addToCart(props.uuid); 
       showAlert('Product added to cart', 'success');
       CartLogic.addToCartCount();
     } catch (error) {
@@ -58,26 +54,28 @@ function ProductCard({ props }) {
           component="img"
           alt={props.title}
           height="140"
-          image="https://picsum.photos/200/300"
+          src={`data:image/png;base64, ${props.image}`} 
         />
 
         <div className='customCard'>
-          <CardContent>
-            <div className='cardTitle'>
-              <Typography gutterBottom variant="h4" component="div" className='titleText'>
+        <CardContent style={{ height: '100%' }}>
+            <div className='cardTitle' style={{ maxHeight: '60px' /* Ajusta según tus necesidades */ }}>
+              <Typography gutterBottom variant="h5" component="div" className='titleText'>
                 {props.title}
               </Typography>
               <Typography variant="h5" className='priceText'>
                   ${props.price}
               </Typography>
             </div>
-            <Typography variant="body2" className='contentText'>
+            <Typography variant="body2" className='contentText' style={{ maxHeight: '40px' /* Ajusta según tus necesidades */ }}>
+              <span style={{ fontWeight: 'bold' }}>Genres: </span>
               {props.genres && props.genres.length > 0
                 ? props.genres.join(', ') 
                 : 'No genres available'}
             </Typography>
-            <Typography variant="body2" className='contentText2'>
-              {props.platform}, {props.isDigital ? 'Digital' : 'Physical'}
+            <Typography variant="body2" className='contentText2' style={{ maxHeight: '40px' /* Ajusta según tus necesidades */ }}>
+              <span style={{ fontWeight: 'bold' }}>Props: </span>
+              {props.platform}, {props.isDigital ? 'Digital' : 'Physical'}, {props.category}
             </Typography>
           </CardContent>
 

@@ -75,6 +75,10 @@ const updateProductStock = async (productUuid, quantity, isAddingStock) => {
     }
 };
 
+const getCheapestProducts = () => {
+    return axios.get(API_URL + "products/cheapestProduct");
+};
+
 const ProductService = {
     getProducts,
     getProduct,
@@ -84,7 +88,8 @@ const ProductService = {
     updateProductStock,
     getAvaliableProducts,
     getTopAvaliableProducts,
-    deleteProducts
+    deleteProducts,
+    getCheapestProducts
 }; 
 
 

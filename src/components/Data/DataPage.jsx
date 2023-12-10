@@ -169,7 +169,6 @@ const DataPage = () => {
         ShopUserService.getActualShopUser(token)
             .then(response => {
                 setIsEmployee(response.data.roles.includes('EMPLOYEE'));
-                console.log(response.data);
             })
             .catch(error => {
                 console.error('Error al cargar al usuario');

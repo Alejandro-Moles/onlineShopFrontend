@@ -24,7 +24,7 @@ import GenreForm from './Forms/GenreForm';
 import CustomAlert from '../AlertsMessage/CustomAlert';
 import ConfirmationDialog from '../Dialog/ConfirmationDialog';
 
-function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
+function UpdateDataDialog({ open, onClose, tableType, updateData}) {
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -179,13 +179,13 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       });
   };
 
-  const updateProduct = (inicialData, data) => {
+  const updateProduct = async (inicialData, data) => {
     if (Object.keys(data).length === 0) {
       setIsDialogOpen(false);
       showAlert('The values are the same as those of the product.', 'info');
       return;
     }
-    
+
     if(!data.category){data.category = inicialData.category}
     if(!data.platform){data.platform = inicialData.platform}
     if(!data.pegi){data.pegi = inicialData.pegi}
@@ -193,10 +193,16 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
     if(!data.price){data.price = inicialData.price}
     if(!data.stock){data.stock = inicialData.stock}
     if(!data.description){data.description = inicialData.description}
-    if(!data.isDigital){data.isDigital = inicialData.isDigital}
+    if(!data.digital){data.digital = inicialData.digital}
+    if(!data.genres){data.genres = inicialData.genres}
+
 
     const isDigital = data.digital === 'digital' ? true : false;
     const isDeleted = inicialData.deleted === 'Yes' ? true : false;
+    const genresArray = Array.isArray(data.genres) ? data.genres : (typeof data.genres === 'string' ? data.genres.split(',').map(genre => genre.trim()) : []);
+
+    const isImageModified = data.image && data.image[0] && data.image[0].includes(',');
+    const imageData = isImageModified ? data.image[0].split(',')[1] : inicialData.image;
 
     ProductsService.updateProducts(inicialData.uuid, {
       category: data.category,
@@ -206,9 +212,9 @@ function UpdateDataDialog({ open, onClose, columns, tableType, updateData}) {
       price: data.price,
       stock: data.stock,
       description: data.description,
-      genres: data.genres,
+      genres: genresArray,
       isDigital: isDigital,
-      image: "image1",
+      image: imageData,
       isDeleted: isDeleted
     })
       .then((response) => {

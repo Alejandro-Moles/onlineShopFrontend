@@ -57,9 +57,9 @@ function Article() {
         onClose={() => setIsAlertOpen(false)}
         autoHideDuration={2000}
       />
-      <div className='details'>
-        <div className='big-img'>
-          <img src="https://picsum.photos/200/300" alt="Product" />
+      <div className='details'> 
+        <div className='big-img'> 
+          <img src={`data:image/png;base64, ${product.image}`}  alt="Product" />
         </div>
 
         <div className='box'>

@@ -29,6 +29,9 @@ function ProductForm({ formData, handleChange, updateData }) {
       ? updateData[0].genres.split(',').map(genre => genre.trim())
       : []
   );
+  
+  const [imageFileNames, setImageFileNames] = useState([]);
+
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -76,9 +79,12 @@ function ProductForm({ formData, handleChange, updateData }) {
   const [digitalValue, setDigitalValue] = useState(updateData ? updateData[0].digital : formData.digital || "");
   const [descriptionValue, setDescriptionValue] = useState(updateData ? updateData[0].description : formData.description || "");
 
+
   const handleProductChange = (e, field) => {
     const newValue =  e.target.value;
     const numberValue = parseFloat(newValue);
+    console.log(newValue)
+    console.log(field)
     switch (field){
       case "platform":
         setPlatformValue(newValue);
@@ -98,7 +104,6 @@ function ProductForm({ formData, handleChange, updateData }) {
           handleChange(field, newValue, field);
         }
         break;
-      case "weight":
         if (!isNaN(numberValue) && numberValue > 0) {
           setWeightValue(newValue);
           handleChange(field, newValue, field);
@@ -138,14 +143,6 @@ function ProductForm({ formData, handleChange, updateData }) {
     { label: 'Physical', value: "physical" },
   ];
 
-  const handleImageChange = (e) => {
-    // Implementar la lógica de selección de imagen si es necesario
-  };
-
-  const isNumberColumn = (columnName) => {
-    return columnName === 'price' || columnName === 'weight' || columnName === 'stock';
-  };
-
   const getColumnAdornment = (columnName) => {
     if (columnName === 'price') {
       return '$';
@@ -153,10 +150,6 @@ function ProductForm({ formData, handleChange, updateData }) {
       return 'kg';
     }
     return '';
-  };
-
-  const isImageColumn = (columnName) => {
-    return columnName === 'image';
   };
 
   const renderSelectExternalData = (field, options, headerName, inicialData) => {
@@ -223,6 +216,53 @@ function ProductForm({ formData, handleChange, updateData }) {
     );
   }
 
+  const renderImageField = () => {
+    return (
+      <div className="AddDataform-field">
+        <input
+          accept="image/*"
+          id="contained-button-file"
+          type="file"
+          multiple
+          style={{ display: 'none', width: '100%' }}
+          onChange={handleImageChange}
+        />
+        <label htmlFor="contained-button-file">
+          <Button variant="outlined" color="primary" component="span" fullWidth>
+            Seleccionar Imágenes
+          </Button>
+        </label>
+      </div>
+    );
+  };
+
+  const handleImageChange = async (e) => {
+    try {
+      const files = e.target.files;
+  
+      const readFilesPromises = Array.from(files).map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            resolve(reader.result);
+          };
+          reader.onerror = (error) => {
+            reject(error);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+  
+      const base64Results = await Promise.all(readFilesPromises);
+      const fileNames = Array.from(files).map((file) => file.name);
+      setImageFileNames(fileNames);
+      handleChange("image", base64Results, "image");
+    } catch (error) {
+      console.error("Error al manejar las imágenes:", error);
+    }
+  };
+
+
   return (
     <DialogContent>
       <FormControl component="fieldset">
@@ -238,6 +278,14 @@ function ProductForm({ formData, handleChange, updateData }) {
           <Button className="AddDataform-field" variant="outlined" color="primary" onClick={handleDialogOpen} fullWidth>
             Seleccionar Géneros
           </Button>
+          <div className="AddDataform-field">
+            {renderImageField()}
+            <div className="SelectedImagesFeedback">
+              {imageFileNames.map((fileName, index) => (
+                <div key={index}>{fileName}</div>
+              ))}
+            </div>
+          </div>
         </div>
       </FormControl>
 

@@ -73,7 +73,7 @@ const LocationDialog = ({ open, onClose, userAddress, user, onSelect }) => {
                         inputProps={{ 'aria-labelledby': labelId }}
                       />
                     </ListItemIcon>
-                    <ListItemText id={labelId} primary={`${address.street}, ${address.home}`} />
+                    <ListItemText id={labelId} primary={`${address.street}, ${address.home}, ${address.apartament}`} />
                   </ListItemButton>
                 </ListItem>
               );

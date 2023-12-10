@@ -12,7 +12,7 @@ function SearchBar({setResults, toggleFilterList}) {
 
     const fetchData =  async (value) => {
         try {
-            const response = await ProductService.getProducts();
+            const response = await ProductService.getAvaliableProducts();
             const json = response.data;
   
             const result = json.filter((products) => {

@@ -1,10 +1,10 @@
 import React from "react";
 import './Title.css';
 
-function Title({products}){
+function Title({title}){
 return (
 		<div className='title'>
-			<h1>Top Sales</h1>
+			<h1>{title}</h1>
 		</div>
 	);
 }

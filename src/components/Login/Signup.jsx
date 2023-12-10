@@ -62,8 +62,11 @@ function Signup() {
       showAlert('Correct', 'success');
       window.location.href = '/login';
     } catch (error) {
-      console.log(error);
-      showAlert('There was an error registering the user ' + error, 'error');
+      if(error.response.data){
+        showAlert(error.response.data, 'error');
+      }else{
+        showAlert('There was an error registering the user ' + error, 'error');
+      }
     }
   };
 

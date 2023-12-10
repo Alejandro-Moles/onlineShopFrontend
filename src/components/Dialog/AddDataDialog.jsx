@@ -41,7 +41,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
   const [formErrors, setFormErrors] = useState({});
  
   //REQUIREMENTS
-  const requiredFieldsProduct = ['category', 'platform', 'productTitle', 'price', 'stock', 'pegi', 'digital', 'description', 'genres'];
+  const requiredFieldsProduct = ['category', 'platform', 'productTitle', 'price', 'stock', 'pegi', 'digital', 'description', 'genres', 'image'];
   const requiredFieldsCategory = ['categoryType'];
   const requiredFieldsPlatform = ['platformType'];
   const requiredFieldsPayment = ['paymentType'];
@@ -159,13 +159,19 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
 
   async function handleProductForm(formData) {
     console.log(formData);
-    const isFormValid = requiredFieldsProduct.every(field => formData[field]);
+    const isFormValid = requiredFieldsProduct.every((field) => formData[field]);
     if (!isFormValid) {
       showAlert('Please fill in all the fields to enter the product.', 'error');
       return;
     }
-
+  
+    if (formData.image.length === 0) {
+      showAlert('Seleccione al menos una imagen.', 'error');
+      return;
+    }
+  
     const isDigital = formData.digital === 'digital' ? true : false;
+    const imageData = formData.image[0].split(',')[1];
 
     const productData = {
       category: formData.category,
@@ -177,7 +183,7 @@ function AddDataDialog({ open, onClose, columns, tableType}) {
       isDigital: isDigital,
       description: formData.description,
       genres: formData.genres,
-      image: "image1",
+      image: imageData,
       isDeleted: false,
     };
     try {
