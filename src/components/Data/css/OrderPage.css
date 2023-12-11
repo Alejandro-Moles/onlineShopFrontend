@@ -14,10 +14,9 @@
   border-radius: 12px;
 }
 
-/* Agregamos estilos para la TableContainer */
 .tableContainer {
   background-color: white;
-  margin-top: 60px; /* Esto sustituye el marginTop en el estilo inline */
+  margin-top: 60px;
 }
 
 .floating-buttons{

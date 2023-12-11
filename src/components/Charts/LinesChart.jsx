@@ -45,13 +45,13 @@ export default function LinesChart({ labels, data }) {
             y: {
                 min: 0,
                 grid: {
-                    color: 'rgba(255, 255, 255, 0.2)', // Color de las líneas horizontales
+                    color: 'rgba(255, 255, 255, 0.2)',
                 },
             },
             x: {
                 ticks: { color: 'rgb(255, 255, 255)' },
                 grid: {
-                    color: 'transparent', // Puedes cambiar esto si deseas líneas verticales en un color diferente
+                    color: 'transparent',
                 },
             },
         },

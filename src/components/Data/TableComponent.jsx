@@ -49,7 +49,7 @@ function TableComponent({ columns, data, deleteDataBaseHandler, type}) {
         }
       }
     });
-    //window.location.reload();
+    window.location.reload();
   }
 
   const handleOpenDialog = () => {

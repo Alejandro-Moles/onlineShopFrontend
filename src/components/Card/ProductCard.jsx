@@ -59,7 +59,7 @@ function ProductCard({ props }) {
 
         <div className='customCard'>
         <CardContent style={{ height: '100%' }}>
-            <div className='cardTitle' style={{ maxHeight: '60px' /* Ajusta según tus necesidades */ }}>
+            <div className='cardTitle' style={{ maxHeight: '60px' }}>
               <Typography gutterBottom variant="h5" component="div" className='titleText'>
                 {props.title}
               </Typography>
@@ -67,13 +67,13 @@ function ProductCard({ props }) {
                   ${props.price}
               </Typography>
             </div>
-            <Typography variant="body2" className='contentText' style={{ maxHeight: '40px' /* Ajusta según tus necesidades */ }}>
+            <Typography variant="body2" className='contentText' style={{ maxHeight: '40px' }}>
               <span style={{ fontWeight: 'bold' }}>Genres: </span>
               {props.genres && props.genres.length > 0
                 ? props.genres.join(', ') 
                 : 'No genres available'}
             </Typography>
-            <Typography variant="body2" className='contentText2' style={{ maxHeight: '40px' /* Ajusta según tus necesidades */ }}>
+            <Typography variant="body2" className='contentText2' style={{ maxHeight: '40px'  }}>
               <span style={{ fontWeight: 'bold' }}>Props: </span>
               {props.platform}, {props.isDigital ? 'Digital' : 'Physical'}, {props.category}
             </Typography>

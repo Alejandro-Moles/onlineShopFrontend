@@ -1,9 +1,8 @@
-/* UserAddressData.css */
 
 .formContainer {
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Cambiado a flex-start para que no esté centrado verticalmente */
+    align-items: flex-start; 
     height: 100vh;
   }
   

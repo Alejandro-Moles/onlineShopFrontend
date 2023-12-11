@@ -1,4 +1,3 @@
-// FilterList.js
 import React, { useState, useEffect } from 'react';
 import './css/FilterList.css';
 import { fetchAvailableCategories, fetchAvailablePlatforms, fetchAvailableGenres } from '../../scripts/loadData';

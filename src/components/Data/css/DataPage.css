@@ -2,23 +2,23 @@
     background-color: #414141;
     display: flex;
     flex-direction: column;
-    width: 100vw; /* 100% del ancho de la ventana gráfica */
-    height: 100vh; /* 100% del alto de la ventana gráfica */
-    overflow: hidden; /* Para que no haya desbordamiento de contenido */
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
   }
   
   .custom-tabs {
-    background-color: #3a3939; /* Cambia el fondo de las pestañas */
-    color: white; /* Cambia el color del texto de las pestañas */
+    background-color: #3a3939;
+    color: white;
   }
   
   .centered-content {
     padding-top: 40px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Alinea los elementos hacia la parte superior */
+    justify-content: flex-start;
     align-items: center;
-    height: 100%; /* Ocupa toda la altura disponible */
+    height: 100%; 
   }
   
   

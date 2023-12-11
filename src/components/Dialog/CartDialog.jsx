@@ -10,6 +10,7 @@ import {
   Button,
   TextField,
   DialogActions,
+  Typography
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CustomAlert from '../AlertsMessage/CustomAlert';
@@ -17,6 +18,7 @@ import './css/CartDialog.css';
 import theme from '../../scripts/Theme';
 import CartLogic from '../../scripts/CartLogic';
 import { ThemeProvider } from '@mui/material/styles';
+import ProductService from '../../services/productService';
  
 const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, updateCartItems, loggeduser, location }) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -27,9 +29,40 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState('info');
 
+  const [productDetails, setProductDetails] = useState([]);
+
   useEffect(() => {
     setPurchaseButtonActive(cartItems.length > 0);
+
+    const fetchProductDetails = async () => {
+      try {
+        const productDetailsWithProductData = await Promise.all(
+          cartItems.map(async (item) => {
+            try {
+              const product = await ProductService.getProduct(item.productUuid);
+              return {
+                ...item,
+                productTitle: product.data.title,
+                productPlatform: product.data.platform,
+                productCategory: product.data.category,
+                productFormat: product.data.isDigital,
+              };
+            } catch (error) {
+              console.error('Error fetching product details:', error);
+              return item;
+            }
+          })
+        );
+        console.log(productDetailsWithProductData)
+        setProductDetails(productDetailsWithProductData);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    };
+
+    fetchProductDetails();
   }, [cartItems]);
+
 
   const handleRemoveItemClick = (item) => {
     if (item.quantity > 1) {
@@ -67,6 +100,10 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
         handleCancelDelete();
       }
     }
+  };
+
+  const getTotalPrice = () => {
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   const handleCancelDelete = () => {
@@ -108,29 +145,42 @@ const CartDialog = ({ open, onClose, onPurchase, cartItems, onRemoveItem, update
           autoHideDuration={2000}
         />
     
-        <DialogTitle>Your Shopping Cart</DialogTitle>
+        <DialogTitle style={{ textAlign: 'center' }}>Your Shopping Cart</DialogTitle>
         <DialogContent>
           {cartItems.length > 0 ? (
             <List>
-              {cartItems.map((item) => (
-                <ListItem
-                  key={item.productUuid}
-                  className={selectedItem?.productUuid === item.productUuid ? 'deleting' : ''}
-                >
-                  <ListItemText primary={item.title} secondary={`Quantity: ${item.quantity}`} />
-                  <IconButton onClick={(e) => { e.stopPropagation(); handleRemoveItemClick(item); }}>
-                    <DeleteIcon color="error"/>
-                  </IconButton>
-                </ListItem>
-              ))}
-            </List>
+            {productDetails.map((item) => (
+              <ListItem
+                key={item.productUuid}
+                className={selectedItem?.productUuid === item.productUuid ? 'deleting' : ''}
+              >
+                <ListItemText
+                  primary={
+                    <Typography component="div">
+                      <div>
+                        <span style={{ fontWeight: 'bold' }}>{`${item.productTitle}`}</span> - {item.productCategory}
+                      </div>
+                      <div style={{ marginTop: '4px' }}>{item.productPlatform} - {item.productFormat ? 'Digital' : 'Physical'}</div>
+                    </Typography>
+                  }
+                  secondary={`Quantity: ${item.quantity} : $${(item.price * item.quantity).toFixed(2)}`}
+                />
+                <IconButton style={{ marginLeft: '20px' }} onClick={(e) => { e.stopPropagation(); handleRemoveItemClick(item); }}>
+                  <DeleteIcon color="error" />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
           ) : (
             <p>Your cart is empty.</p>
           )}
         </DialogContent>
     
-        {isPurchaseButtonActive && (
-          <DialogActions style={{ justifyContent: 'center' }}>
+         {isPurchaseButtonActive && (
+          <DialogActions style={{ flexDirection: 'column', alignItems: 'center' }}>
+            <Typography variant="body1" color="textSecondary" style={{ marginBottom: '8px' }}>
+              Total Price: ${getTotalPrice().toFixed(2)}
+            </Typography>
             <Button onClick={handlePurchase} color="primary">
               Purchase
             </Button>

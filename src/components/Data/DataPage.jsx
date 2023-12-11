@@ -12,7 +12,6 @@ import PaymentService from '../../services/paymentService';
 import GenreService from '../../services/genreService';
 import AlertMessage from '../AlertsMessage/AlertMessage';
 import ShopUserService from '../../services/shopUserService';
-import ForbiddenPage from '../ErrorPages/ForbiddenPage';
 
 const DataPage = () => { 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -178,21 +177,18 @@ const DataPage = () => {
   }, []);
 
   const tableColumns = [
-    // Para "Categories"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
       { field: 'categoryType', headerName: 'Category', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
-    // Para "Platforms"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
       { field: 'platformsType', headerName: 'Platform', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
-    // Para "Products"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'image', hideable: true },
@@ -208,21 +204,18 @@ const DataPage = () => {
       { field: 'description', headerName: 'Description', width: 200 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
-    // Para "Payments"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
       { field: 'paymentType', headerName: 'Payments', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
-    // Para "Deliveries"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
       { field: 'deliveryType', headerName: 'Delivery', width: 130 },
       { field: 'deleted', headerName: 'Deleted', width: 90 },
     ],
-    // Para "Genres"
     [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'uuid', hideable: true },
