@@ -32,3 +32,5 @@ As there is some predefined data in the database, there will be only one user re
 - Contains a page to view some interesting statistics of the website.
 - You will have a fully functional shopping cart implemented. Each user will have their own shopping cart and it will not be modified when logging out and setting up another account.
 - The project will have a fully functional login system and if the web page is closed with a logged in user, the user's session will not be closed. It will close after a certain period of time.
+
+> **Note:**  The backend repository link is https://github.com/Alejandro-Moles/OnlineShop_AlejandroMolesHurtado.git
